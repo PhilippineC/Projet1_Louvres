@@ -1,0 +1,335 @@
+body {
+    width: 750px;
+    margin : auto;
+    background-color: #313330;
+}
+
+.navbar-default {
+    background-color: #222222;
+    border-color: transparent;
+    height: 100px;
+    margin-bottom: 0px;
+}
+.navbar-default .navbar-brand:hover {
+    color: white;
+}
+
+.navbar-brand {
+    font-size : 25px;
+    margin-top : 15px;
+}
+
+.navbar-header:hover {
+    color : white;
+}
+
+.navbar {
+    text-transform: none;
+    font-size : 1.7em;
+}
+
+.logo {
+    margin-top : 24px;
+}
+
+h1 {
+	margin-top: 0px;
+	color : white;
+	text-transform: none;
+    font-family : 'Times New Roman', sans-serif;
+}
+
+.bandeau_rouge {
+    height: 22px;
+    background-color : #c72d01;
+}
+
+.bandeau_rouge img {
+    margin-left : 15px;
+}
+
+.header {
+    background-color: white;
+}
+
+.header h1 {
+    color : black;
+    font-size : 1.6em;
+}
+
+.header_texte {
+    padding : 20px 20px 10px 20px;
+}
+
+.header_texte p {
+    font-size : 1em;
+}
+
+.encart_gris {
+    background-color: #4e4e4e;
+    padding-left: 20px;
+    border-bottom : 1px solid lightgrey;
+}
+
+.encart_gris p {
+    color : white;
+    font-size : 1.2em;
+    padding-top: 5px;
+}
+
+.date_picker, .type_billet , #nbr_billet, #prix_total, #info_visiteur {
+    background-color: white;
+    padding-bottom : 5px;
+}
+
+    /**** DATEPICKER ****/
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    border: 2px solid red;
+}
+
+
+.legende {
+    border : 2px double #4e4e4e;
+    border-radius: 10px;
+    margin-top : 60px;
+    padding-top: 10px;
+}
+
+.legend_select {
+    border : 2px solid red;
+    height : 20px;
+}
+
+.legend_ouvert {
+    border : 1px solid #d7dbde;
+    background-color: #eeeeee;
+    height : 20px;
+}
+
+.legend_ferme {
+    border : 1px solid #f0f2f3;
+    background-color: #f9fafa;
+    height : 20px;
+}
+
+.legend_complet {
+    border : 2px solid #d7dbde;
+    background-color: #f3722c;
+    height : 20px;
+}
+
+#date_selectionnee {
+    color : #c62d02;
+    padding-left: 30px;
+    margin-top: 10px;
+    font-weight: 700;
+}
+
+#form_type_billet {
+    margin-left: 50px;
+
+}
+
+.tableau_tarifs {
+    margin-top: 5px;
+    padding-left: 40px;
+}
+
+.option_nbbillets {
+    width: 62%;
+}
+
+.texte_billet p {
+    padding-top : 6px;
+    margin-left : -5px;
+}
+.tarif_billet {
+    font-size : 1.1em;
+    color : #4e4e4e;
+    padding-left : 0px;
+    padding-top: 6px;
+    text-align: center;
+}
+
+.input_form {
+    padding-left: 30px;
+}
+
+.help-block {
+    font-size:0.7em;
+    margin-bottom: 0px;
+}
+
+fieldset {
+    border: 2px solid #4e4e4e;
+    paddin-top: 10px;
+    paddin-left: 10px;
+    margin-top : 10px;
+    margin-left : 10px;
+    width: 725px;
+}
+
+legend{
+    margin-bottom : 0px;
+    font-size : 1.1em;
+    width: 14%;
+    margin-left: 20px;
+    padding-left: 10px;
+    color : #c62d02;
+}
+
+.form-group {
+    margin-bottom: 0px;
+}
+
+hr {
+    height: none;
+    border: none;
+    border-top: 1px dashed grey;
+}
+
+.pays {
+    width : auto;
+}
+.btn-sm, .btn-group-sm > .btn {
+    width:  175px;
+}
+
+
+.error {
+    color : red;
+    font-size : 0.7em;
+}
+
+.checkbox-inline {
+    padding-top: 5px;
+}
+
+.champs, .reduit {
+    margin-left: 0px;
+    font-size: 0.8em;
+}
+
+.reduit {
+    margin-bottom : 7px;
+}
+
+.form-horizontal .checkbox-inline {
+    margin-left: 15px;
+    padding-top: 5px;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    margin-top: 1px;
+}
+
+#tarif_calcule {
+    margin-left: 15px;
+    margin-top: 8px;
+}
+
+.dropdown-menu {
+    max-width: 216px;
+}
+
+#verif {
+    color : #c62d02;
+    padding-left: 22px;
+    font-weight: 700;
+}
+
+#detail_commande {
+    border : solid 2px #c72d01;
+    border-radius: 8px;
+    box-shadow: 3px 3px 6px 0 #c72d01;
+    background-color: rgb(245, 245, 245);
+    padding-left: 12px;
+    padding-top: 5px;
+    margin-bottom : 20px;
+}
+
+#details_billets {
+    padding-left: 10px;
+    color: #c72d01;
+    margin-top: -10px;
+}
+
+#details_billets p {
+    margin-bottom : 1px;
+    font-size : 0.9em;
+}
+
+#prix_total {
+    color : #4e4e4e;
+    padding-left : 10px;
+    padding-top: 10px;
+    padding-right : 10px;
+    padding-bottom: 15px;
+}
+
+#total_commande {
+    border-top : 2px dashed grey;
+    width : 90%;
+    margin-top : 10px;
+    padding-top : 2px;
+}
+
+#payments {
+    background-color: darkgrey;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#payments span {
+    padding-left : 15px;
+    font-weight: 700;
+    font-size: 0.8em;
+}
+
+#payments img {
+    size: 60%;
+}
+
+#mentions {
+    background-color: #222222;
+    padding-top : 10px;
+    padding-bottom : 20px;
+}
+
+#mentions a {
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    font-size : 0.8em;
+}
+
+#mentions a:hover {
+    text-decoration: none;
+}
+#mentions li {
+    list-style: none;
+}
+
+/* Pour smartphones */
+@media (max-width: 768px) {
+    .header_texte p {
+        font-size : 0.8em;
+    }
+    fieldset {
+       width: 331px;
+    }
+    legend{
+        font-size : 0.9em;
+        width: 25%;
+    }
+    body {
+        width: 350px;
+    }
+    .sous_titre_tarif {
+        font-size : 0.6em;
+    }
+    .btn-sm {
+        width: 297px;
+    }
+
+}

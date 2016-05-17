@@ -1,0 +1,3 @@
+home:
+    resource: "@LouvresCommandeBundle/Resources/config/routing.yml"
+    prefix:   /

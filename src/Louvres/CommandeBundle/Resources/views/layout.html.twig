@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    {% stylesheets 'bundles/louvrescommande/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+</head>
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+{% block nav %}
+<!-- Navigation -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand hidden-sm hidden-md hidden-lg">Billeterie</span>
+            </div>
+
+            <div class="collapse navbar-collapse logo">
+                <div class="col-sm-4">
+                    {% image '@LouvresCommandeBundle/Resources/public/images/logo_louvre.png' %}
+                    <img src="{{ asset_url }}" alt="Logo du Louvres" />
+                    {% endimage %}
+                </div>
+                <div class="col-sm-8">
+                    <h1>Billeterie</h1>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bandeau rouge -->
+    <div class="bandeau_rouge">
+        <div class="container-fluid">
+            {% image '@LouvresCommandeBundle/Resources/public/images/home_crumb.png' %}
+            <img src="{{ asset_url }}" alt="Pyramide" />
+            {% endimage %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+<!-- Pied de page  -->
+{% block footer %}
+    <footer>
+        <div id="payments">
+            <span>Paiement 100% sécurisé</span>
+            {% image '@LouvresCommandeBundle/Resources/public/images/mastercard.gif' %}
+            <img src="{{ asset_url }}" alt="master" width=60 height=30/>
+            {% endimage %}
+            {% image '@LouvresCommandeBundle/Resources/public/images/visa.gif' %}
+            <img src="{{ asset_url }}" alt="visa" width=50 height=20/>
+            {% endimage %}
+            {% image '@LouvresCommandeBundle/Resources/public/images/e.bleue.png' %}
+            <img src="{{ asset_url }}" alt="e.BLEUE" width=50 height=20/>
+            {% endimage %}
+        </div>
+        <div id="mentions">
+            <a class="col-sm-3" href="#">Tarifs</a>
+            <a class="col-sm-3" href="#">Contactez-nous</a>
+            <a class="col-sm-3" href="#">CGV</a>
+            <a class="col-sm-3" href="#">Aide/FAQ</a>
+        </div>
+    </footer>
+
+{% endblock %}
+
+{% block javascript %}
+    {% javascripts
+        '@LouvresCommandeBundle/Resources/public/js/jquery.min.js'
+        '@LouvresCommandeBundle/Resources/public/js/jquery-ui.min.js'
+        '@LouvresCommandeBundle/Resources/public/js/bootstrap.min.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+</body>
+
+</html>
