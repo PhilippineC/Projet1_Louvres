@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BilletType extends AbstractType
 {
@@ -35,10 +36,7 @@ class BilletType extends AbstractType
                         'placeholder' => 'Prénom'
                     ))
             )
-            ->add('pays', CountryType::class, array(
-                'attr' => array('class' => 'pays'),
-                'placeholder' => false,
-            ))
+            ->add('pays', CountryType::class)
 
             ->add('dateNaissance', DateType::class, array(
                     'widget' => 'single_text',
@@ -47,9 +45,7 @@ class BilletType extends AbstractType
                 'attr' => array(
                     'placeholder' => 'Date de naissance'
                 ))
-        )
-         /*   ->add('commande')*/
-        ;
+        );
     }
     
     /**

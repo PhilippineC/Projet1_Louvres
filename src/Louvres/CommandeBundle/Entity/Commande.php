@@ -2,7 +2,9 @@
 
 namespace Louvres\CommandeBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Commande
@@ -12,6 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Commande
 {
+    /**
+     * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $billets;
     /**
      * @var int
      *
@@ -23,14 +30,14 @@ class Commande
 
     /**
      * @var \DateTime
-     *
+     *@Assert\DateTime()
      * @ORM\Column(name="date_com", type="datetime")
      */
     private $dateCom;
 
     /**
      * @var \DateTime
-     *
+     *@Assert\Date()
      * @ORM\Column(name="date_visite", type="date")
      */
     private $dateVisite;
@@ -44,21 +51,20 @@ class Commande
 
     /**
      * @var int
-     *
+     * @Assert\Range(min=1, max=7)
      * @ORM\Column(name="nb_billet", type="integer")
      */
-    private $nbBillet;
+    private $nbBillet = 1;
 
     /**
      * @var int
-     *
      * @ORM\Column(name="prix_total", type="integer")
      */
     private $prixTotal;
 
     /**
      * @var string
-     *
+     * @Assert\Email()
      * @ORM\Column(name="mail", type="string", length=255)
      */
     private $mail;
@@ -67,6 +73,9 @@ class Commande
     public function __construct()
     {
         $this->dateCom = new \Datetime();
+        $this->billets = new ArrayCollection();
+        $this->setPrixTotal(0);
+        $this->setMail('ppp@pppp.com');
     }
 
     /**
@@ -222,4 +231,41 @@ class Commande
     {
         return $this->mail;
     }
+
+    /**
+     * Add billet
+     *
+     * @param \Louvres\CommandeBundle\Entity\Billet $billet
+     *
+     * @return Commande
+     */
+    public function addBillet(\Louvres\CommandeBundle\Entity\Billet $billet)
+    {
+    /*    $this->billets->add($billet);*/
+        $this->billets[] = $billet;
+        // On lie le billet à la commande
+        $billet->setCommande($this);
+        return $this;
+    }
+
+    /**
+     * Remove billet
+     *
+     * @param \Louvres\CommandeBundle\Entity\Billet $billet
+     */
+    public function removeBillet(\Louvres\CommandeBundle\Entity\Billet $billet)
+    {
+        $this->billets->removeElement($billet);
+    }
+
+    /**
+     * Get billets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBillets()
+    {
+        return $this->billets;
+    }
+
 }

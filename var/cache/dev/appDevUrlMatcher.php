@@ -27,21 +27,66 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         $context = $this->context;
         $request = $this->request;
 
-        if (0 === strpos($pathinfo, '/js/4dc3873')) {
-            // _assetic_4dc3873
-            if ($pathinfo === '/js/4dc3873.js') {
-                return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => NULL,  '_format' => 'js',  '_route' => '_assetic_4dc3873',);
-            }
-
-            if (0 === strpos($pathinfo, '/js/4dc3873_')) {
-                // _assetic_4dc3873_0
-                if ($pathinfo === '/js/4dc3873_jquery.flagstrap.min_1.js') {
-                    return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => 0,  '_format' => 'js',  '_route' => '_assetic_4dc3873_0',);
+        if (0 === strpos($pathinfo, '/js')) {
+            if (0 === strpos($pathinfo, '/js/5997e79')) {
+                // _assetic_5997e79
+                if ($pathinfo === '/js/5997e79.js') {
+                    return array (  '_controller' => 'assetic.controller:render',  'name' => '5997e79',  'pos' => NULL,  '_format' => 'js',  '_route' => '_assetic_5997e79',);
                 }
 
-                // _assetic_4dc3873_1
-                if ($pathinfo === '/js/4dc3873_commande_2.js') {
-                    return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => 1,  '_format' => 'js',  '_route' => '_assetic_4dc3873_1',);
+                if (0 === strpos($pathinfo, '/js/5997e79_')) {
+                    // _assetic_5997e79_0
+                    if ($pathinfo === '/js/5997e79_commande2_1.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '5997e79',  'pos' => 0,  '_format' => 'js',  '_route' => '_assetic_5997e79_0',);
+                    }
+
+                    // _assetic_5997e79_1
+                    if ($pathinfo === '/js/5997e79_jquery.flagstrap.min_2.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '5997e79',  'pos' => 1,  '_format' => 'js',  '_route' => '_assetic_5997e79_1',);
+                    }
+
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/js/25d4845')) {
+                // _assetic_25d4845
+                if ($pathinfo === '/js/25d4845.js') {
+                    return array (  '_controller' => 'assetic.controller:render',  'name' => '25d4845',  'pos' => NULL,  '_format' => 'js',  '_route' => '_assetic_25d4845',);
+                }
+
+                if (0 === strpos($pathinfo, '/js/25d4845_')) {
+                    // _assetic_25d4845_0
+                    if ($pathinfo === '/js/25d4845_commande_1.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '25d4845',  'pos' => 0,  '_format' => 'js',  '_route' => '_assetic_25d4845_0',);
+                    }
+
+                    // _assetic_25d4845_1
+                    if ($pathinfo === '/js/25d4845_jquery.flagstrap.min_2.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '25d4845',  'pos' => 1,  '_format' => 'js',  '_route' => '_assetic_25d4845_1',);
+                    }
+
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/js/4dc3873')) {
+                // _assetic_4dc3873
+                if ($pathinfo === '/js/4dc3873.js') {
+                    return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => NULL,  '_format' => 'js',  '_route' => '_assetic_4dc3873',);
+                }
+
+                if (0 === strpos($pathinfo, '/js/4dc3873_')) {
+                    // _assetic_4dc3873_0
+                    if ($pathinfo === '/js/4dc3873_jquery.flagstrap.min_1.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => 0,  '_format' => 'js',  '_route' => '_assetic_4dc3873_0',);
+                    }
+
+                    // _assetic_4dc3873_1
+                    if ($pathinfo === '/js/4dc3873_commande_2.js') {
+                        return array (  '_controller' => 'assetic.controller:render',  'name' => '4dc3873',  'pos' => 1,  '_format' => 'js',  '_route' => '_assetic_4dc3873_1',);
+                    }
+
                 }
 
             }
@@ -270,13 +315,18 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // home
+        // Louvres_commande_home
         if (rtrim($pathinfo, '/') === '') {
             if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'home');
+                return $this->redirect($pathinfo.'/', 'Louvres_commande_home');
             }
 
-            return array (  '_controller' => 'Louvres\\CommandeBundle\\Controller\\CommandeController::homeAction',  '_route' => 'home',);
+            return array (  '_controller' => 'Louvres\\CommandeBundle\\Controller\\CommandeController::homeAction',  '_route' => 'Louvres_commande_home',);
+        }
+
+        // Louvres_commande_paiement
+        if ($pathinfo === '/paiement') {
+            return array (  '_controller' => 'Louvres\\CommandeBundle\\Controller\\CommandeController::paiementAction',  '_route' => 'Louvres_commande_paiement',);
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

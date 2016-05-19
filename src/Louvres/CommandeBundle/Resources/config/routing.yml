@@ -1,3 +1,7 @@
-home:
+Louvres_commande_home:
         path:     /
         defaults: { _controller: LouvresCommandeBundle:Commande:home }
+
+Louvres_commande_paiement:
+        path:     /paiement
+        defaults: { _controller: LouvresCommandeBundle:Commande:paiement }

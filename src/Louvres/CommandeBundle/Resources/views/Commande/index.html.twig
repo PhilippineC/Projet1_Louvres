@@ -35,7 +35,7 @@
     <!-- Datepicker  -->
     <div class="date_picker">
         <div class="container row">
-            {{ form_start(formCommande) }}
+            {{ form_start(formCommande, {'action': path('Louvres_commande_home')}) }}
             {{ form_errors(formCommande) }}
             {{ form_widget(formCommande.dateVisite, {'attr': {'id': 'datepicker', 'class': 'col-sm-6 col-md-5 col-lg-4'}}) }}
         <!--    <div id="datepicker" class="col-sm-6 col-md-5 col-lg-4">
@@ -95,87 +95,53 @@
     </div>
 
     <!-- Troisième encart gris : 3.Choisissez le nombre de billets -->
+ <!--   <div class="encart_gris">
+        <div class="container-fluid">
+            <p>3. Choisissez le nombre de billets</p>
+        </div>
+    </div> -->
+
+    <!-- Selection du nombre de billets
+    <div id="nbr_billet">
+        <div class="container row">
+            <div class="form-horizontal tableau_tarifs">
+                <div class="row form-group">
+                 {#   {{ form_label(formCommande.nbBillet, "Nombre de billets :", {'label_attr': {'class': 'texte_billet col-xs-6 col-sm-3 col-md-2'}}) }}#}
+                  {#  {{ form_errors(formCommande.nbBillet) }}#}
+                    <div class="select col-xs-4 col-sm-3 col-md-2">
+                    {#    {{ form_widget(formCommande.nbBillet, {'attr': {'class': 'form-control input-sm option_nbbillets'}}) }}#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- Quatrième encart gris : 4.Renseignez ces informations -->
     <div class="encart_gris">
         <div class="container-fluid">
             <p>3. Choisissez le nombre de billets</p>
         </div>
     </div>
 
-    <!-- Selection du nombre de billets-->
-    <div id="nbr_billet">
-        <div class="container row">
-            <div class="form-horizontal tableau_tarifs">
-                <div class="row form-group">
-                    {{ form_label(formCommande.nbBillet, "Nombre de billets :", {'label_attr': {'class': 'texte_billet col-xs-6 col-sm-3 col-md-2'}}) }}
-                    {{ form_errors(formCommande.nbBillet) }}
-                    <div class="select col-xs-4 col-sm-3 col-md-2">
-                        {{ form_widget(formCommande.nbBillet, {'attr': {'class': 'form-control input-sm option_nbbillets'}}) }}
-                    </div>
+    <!-- Renseignements des coordonnées-->
+    <div id="info_visiteur">
+        <div class="container">
+            <div id="billet">
+            <!-- Formulaire type pour les billets normal, enfant, réduit, senior et famille --->
+                <div class="billets" data-prototype="
+                {% filter escape %}
+                    {{ include('LouvresCommandeBundle:Commande:prototype.html.twig', { 'form': formCommande.billets.vars.prototype }) }}
+                {% endfilter %}">
                 </div>
-                {{ form_end(formCommande) }}
             </div>
         </div>
     </div>
 
-    <!-- Quatrième encart gris : 4.Renseignez ces informations -->
+
+<!-- Cinquième encart gris : 5. Récapitulatif de la commande -->
     <div class="encart_gris">
         <div class="container-fluid">
-            <p>4. Renseignez ces informations</p>
-        </div>
-    </div>
-
-    <!-- Renseignements des coordonnées-->
-    <div id="info_visiteur">
-
-        <div class="container">
-            <div id="billet"></div>
-
-            <!-- Formulaire type pour les billets normal, enfant, réduit, senior et famille --->
-            {{ form_start(formBillet, {'attr': {'id': 'formulaire_a_copier', 'class': 'form-horizontal'}}) }}
-            {{ form_errors(formBillet) }}
-          <!--  <form class="form-horizontal row" id="formulaire_a_copier"> -->
-                <fieldset>
-                    <legend></legend>
-
-                    <div class="row champs">
-                        <div class="form-group input_form col-xs-12 col-sm-3">
-                            {{ form_widget(formBillet.nom, {'attr': {'class': 'form-control input-sm'}}) }}
-                         <!--   <input name="nom" id="nom" placeholder="Nom" class="form-control input-sm" type="text" required> -->
-                            <span class="error">Saisir au moins 2 caractères</span>
-                        </div>
-                        <div class="form-group input_form col-xs-12 col-sm-3">
-                            {{ form_widget(formBillet.prenom, {'attr': {'class': 'form-control input-sm'}}) }}
-                            <span class="error">Saisir au moins 2 caractères</span>
-                        </div>
-
-                        <div class="form-group input_form col-xs-12 col-sm-3">
-                            {{ form_widget(formBillet.dateNaissance, {'attr': {'class': 'form-control input-sm'}}) }}
-                        <!--    <input name="date_naissance" id="date_naissance" placeholder="Date de naissance" class="form-control input-sm" type="text"> -->
-                            <span class="help-block">Format attendu : XX/XX/XXXX</span>
-                            <span class="error">Date invalide</span>
-                        </div>
-                        <div class="col-xs-12 col-sm-3">
-                            {{ form_widget(formBillet.pays ) }}
-                            <!--    <div class="pays">
-                            </div>-->
-                        </div>
-                    </div>
-                    <div class="row reduit">
-                        <label class="checkbox-inline">
-                            {{ form_widget(formBillet.reduit) }}
-                            {{ form_label(formBillet.reduit) }}
-                     <!--       <input type="checkbox" id="reduit" value="tarif_reduit">Tarif réduit <em>(étudiant, employé du musée, d’un service du Ministère de la Culture, militaire…)</em> -->
-                        </label>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </div>
-
-    <!-- Cinquième encart gris : 5. Récapitulatif de la commande -->
-    <div class="encart_gris">
-        <div class="container-fluid">
-            <p>5. Récapitulatif de la commande</p>
+            <p>4. Récapitulatif de la commande</p>
         </div>
     </div>
 
@@ -188,22 +154,25 @@
             <div id="details_billets"></div>
             <p id ="total_commande"><strong>Total de la commande : <span id="prix">0 €</span></strong></p>
         </div>
-        <!--   <button id="btn-reset" type="submit" class="btn btn-warning btn-sm col-sm-offset-4 col-xs-offset-1">Reset</button> -->
-        <button id="btn-valider" type="submit" class="btn btn-default btn-sm col-sm-offset-4 col-xs-offset-1">Valider la commande</button>
+    <!--   <button id="btn-reset" type="submit" class="btn btn-warning btn-sm col-sm-offset-4 col-xs-offset-1">Reset</button> -->
+        {{ form_widget(formCommande.valider, {'attr': {'class': 'btn btn-default btn-sm col-sm-offset-4 col-xs-offset-1', 'id' : 'btn-valider'}}) }}
+    <!--    <button id="btn-valider" type="submit" class="btn btn-default btn-sm col-sm-offset-4 col-xs-offset-1">Valider la commande</button> -->
+        {{ form_rest(formCommande) }}
+        {{ form_end(formCommande) }}
     </div>
 
 {% endblock %}
 
 {% block footer %}
-    {{ parent() }}
+{{ parent() }}
 {% endblock %}
 
 {% block javascript %}
-    {{ parent() }}
-    {% javascripts
-    '@LouvresCommandeBundle/Resources/public/js/jquery.flagstrap.min.js'
-    '@LouvresCommandeBundle/Resources/public/js/commande.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+{{ parent() }}
+{% javascripts
+'@LouvresCommandeBundle/Resources/public/js/commande2.js'
+'@LouvresCommandeBundle/Resources/public/js/jquery.flagstrap.min.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 {% endblock %}
 

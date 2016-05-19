@@ -3,6 +3,7 @@
 namespace Louvres\CommandeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Billet
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Billet
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande", inversedBy="billets", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
 
@@ -28,22 +29,21 @@ class Billet
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="reduit", type="string", length=255)
+     * @var bool
+     * @ORM\Column(name="reduit", type="boolean")
      */
-    private $reduit;
+    private $reduit = false;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min=2, minMessage = "Saisir au moins deux caractères")
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min=2)
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     private $prenom;
@@ -57,11 +57,20 @@ class Billet
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Date()
      * @ORM\Column(name="date_naissance", type="date")
      */
     private $dateNaissance;
 
+    /**
+     * @var string
+     * @ORM\Column(name="tarif", type="string")
+     */
+    private $tarif = '';
+
+    public function __construct() {
+
+    }
 
     /**
      * Get id
@@ -215,5 +224,56 @@ class Billet
     public function getCommande()
     {
         return $this->commande;
+    }
+
+    public function addCommande(Commande $commande) {
+        if (!$this->commande->contains($commande)) {
+            $this->commande->add($commande);
+        }
+    }
+
+
+    /**
+     * Set tarif
+     *
+     * @param \string $tarif
+     *
+     * @return Billet
+     */
+    public function setTarif($tarif)
+    {
+        $this->tarif = $tarif;
+
+        return $this;
+    }
+
+    /**
+     * Get tarif
+     *
+     * @return \string
+     */
+    public function getTarif()
+    {
+        return $this->tarif;
+    }
+
+    public function calculTarif() {
+        $today = new \DateTime();
+        $date_normal = $today->sub(new \DateInterval('P12Y'));
+        $date_enfant = $today->sub(new \DateInterval('P4Y'));
+        $date_senior = $today->sub(new \DateInterval('P60Y'));
+
+        if (($this->dateNaissance > $date_enfant) && ($this->dateNaissance <= $today)) {
+            $this->setTarif('gratuit');
+        }
+        elseif ($this->dateNaissance <= $date_senior) {
+            $this->setTarif('senior');
+        }
+        else if ($this->dateNaissance <= $date_normal) {
+            $this->setTarif('normal');
+        }
+        else if ($this->dateNaissance <= $date_enfant)  {
+            $this->setTarif('enfant');
+        }
     }
 }

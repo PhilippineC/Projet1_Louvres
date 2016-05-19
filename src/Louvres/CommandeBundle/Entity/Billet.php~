@@ -3,6 +3,7 @@
 namespace Louvres\CommandeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Billet
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Billet
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande")
+     * @ORM\ManyToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande", inversedBy="billets", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
 
@@ -28,22 +29,21 @@ class Billet
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="type_tarif", type="string", length=255)
+     * @var bool
+     * @ORM\Column(name="reduit", type="boolean")
      */
-    private $typeTarif;
+    private $reduit = false;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min=2, minMessage = "Saisir au moins deux caractères")
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min=2)
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     private $prenom;
@@ -57,10 +57,16 @@ class Billet
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Date()
      * @ORM\Column(name="date_naissance", type="date")
      */
     private $dateNaissance;
+
+    /**
+     * @var string
+     * @ORM\Column(name="tarif", type="string")
+     */
+    private $tarif;
 
 
     /**
@@ -74,27 +80,27 @@ class Billet
     }
 
     /**
-     * Set typeTarif
+     * Set reduit
      *
-     * @param string $typeTarif
+     * @param string $reduit
      *
      * @return Billet
      */
-    public function setTypeTarif($typeTarif)
+    public function setreduit($reduit)
     {
-        $this->typeTarif = $typeTarif;
+        $this->reduit = $reduit;
 
         return $this;
     }
 
     /**
-     * Get typeTarif
+     * Get reduit
      *
      * @return string
      */
-    public function getTypeTarif()
+    public function getreduit()
     {
-        return $this->typeTarif;
+        return $this->reduit;
     }
 
     /**
@@ -192,5 +198,93 @@ class Billet
     {
         return $this->dateNaissance;
     }
-}
 
+    /**
+     * Set commande
+     *
+     * @param \Louvres\CommandeBundle\Entity\Commande $commande
+     *
+     * @return Billet
+     */
+    public function setCommande(\Louvres\CommandeBundle\Entity\Commande $commande)
+    {
+        $this->commande = $commande;
+
+        return $this;
+    }
+
+    /**
+     * Get commande
+     *
+     * @return \Louvres\CommandeBundle\Entity\Commande
+     */
+    public function getCommande()
+    {
+        return $this->commande;
+    }
+
+    public function calculTarif() {
+        $today = new \DateTime();
+        $date_normal = $today->sub(new \DateInterval('P12Y'));
+        $date_enfant = $today->sub(new \DateInterval('P4Y'));
+        $date_senior = $today->sub(new \DateInterval('P60Y'));
+
+        if (($this->dateNaissance > $date_enfant) && ($this->dateNaissance <= $today)) {
+            $this->setTarif('enfant');
+        }
+
+        /*    date = date.split("/").reverse().join("/");
+            var tarif;
+            var age_normal = 12, age_enfant = 4, age_senior = 60, age_old = 110;
+            var date_normal, date_enfant, date_senior, date_old, today = new Date(), date_enr = new Date(date);
+            date_normal = new Date(today.getFullYear() - age_normal, today.getMonth(), today.getDate());
+            date_enfant = new Date(today.getFullYear() - age_enfant, today.getMonth(), today.getDate());
+            date_senior = new Date(today.getFullYear() - age_senior, today.getMonth(), today.getDate());
+            date_old = new Date(today.getFullYear() - age_old, today.getMonth(), today.getDate());
+            if ((date_enr > date_enfant) && (date_enr <= today)) {
+                tarif ='gratuit';
+            }
+            else if (date_enr <= date_old) {
+                return false;
+            }
+            else if (date_enr <= date_senior) {
+                tarif ='sénior';
+
+            }
+            else if (date_enr <= date_normal) {
+                tarif ='normal';
+            }
+            else if (date_enr <= date_enfant) {
+                tarif ='enfant';
+            }
+            else {
+                return false;
+            }
+            var result = tarif;
+            return result;*/
+    }
+
+    /**
+     * Set tarif
+     *
+     * @param \string $tarif
+     *
+     * @return Billet
+     */
+    public function setTarif(\string $tarif)
+    {
+        $this->tarif = $tarif;
+
+        return $this;
+    }
+
+    /**
+     * Get tarif
+     *
+     * @return \string
+     */
+    public function getTarif()
+    {
+        return $this->tarif;
+    }
+}
