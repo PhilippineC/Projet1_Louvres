@@ -14,7 +14,7 @@ class LoadBillet implements FixtureInterface
         $commande = new Commande();
         $commande->setDateVisite(new \DateTime());
         $commande->setTypeBillet('journee');
-        $commande->setNbBillet(10);
+        $commande->setNbBillet(1500);
         $commande->setPrixTotal(50);
         $commande->setMail('blabla@blabla.com');
         $manager->persist($commande);
@@ -52,7 +52,7 @@ class LoadBillet implements FixtureInterface
             $billet = new Billet();
             $billet->setCommande($commande);
             $billet->setPays($listBillet['pays']);
-            $billet->setTypeTarif($listBillet['typeTarif']);
+            $billet->setTarif($listBillet['typeTarif']);
             $billet->setNom($listBillet['nom']);
             $billet->setPrenom($listBillet['prenom']);
             $billet->setDateNaissance($listBillet['dateNaissance']);

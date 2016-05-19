@@ -40,7 +40,6 @@ class BilletType extends AbstractType
 
             ->add('dateNaissance', DateType::class, array(
                     'widget' => 'single_text',
-                    // this is actually the default format for single_text
                     'format' => 'dd-MM-yyyy',
                 'attr' => array(
                     'placeholder' => 'Date de naissance'

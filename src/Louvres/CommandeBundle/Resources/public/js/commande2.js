@@ -2,7 +2,7 @@
 
 /* ******************** DATEPICKER ********************************* */
 
-// Développer une fonction qui ira chercher dans la BDD les jours complet pour les retourner AJAX ?//
+// Développer une fonction qui ira chercher dans la BDD les jours complet pour les retourner//
 var disableddates = ["5-1-2016","11-1-2016", "12-25-2016"];
 function DisableSpecificDates(date) {
 
@@ -437,7 +437,7 @@ $(function() {
     // La fonction qui ajoute un lien de suppression d'une catégorie
     function addDeleteLink($prototype) {
         // Création du lien
-        $deleteLink = $('<a href="#" class="billet_link col-xs-offset-7 col-sm-offset-7">Supprimer ce billet</a>');
+        $deleteLink = $('<a href="#" class="billet_link col-xs-offset-7 col-sm-offset-9 col-md-offset-7 col-lg-offset-6">Supprimer ce billet</a>');
         // Ajout du lien
         $prototype.append($deleteLink);
         // Ajout du listener sur le clic du lien

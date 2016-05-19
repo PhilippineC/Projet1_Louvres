@@ -17,6 +17,14 @@ class CommandeController extends Controller
      */
     public function homeAction(Request $request)
     {
+    /*  Aller chercher les dates où le musée est complet   */
+        $datesComplet = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('LouvresCommandeBundle:Commande')
+            ->getDatesComplet();
+        var_dump($datesComplet);
+
     /*    $billets = new Billet();*/
          $commande = new Commande();
          $commande->setDateCom(new \DateTime());
@@ -25,13 +33,13 @@ class CommandeController extends Controller
 
         // On vérifie que les valeurs entrées sont correctes
         if ($formCommande->handleRequest($request)->isValid()) {
-            var_dump($commande);
+         /*   var_dump($commande);*/
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
             $em->flush();
 
             // On redirige vers la page de visualisation de l'annonce nouvellement créée
-        /*    return $this->redirect($this->generateUrl('Louvres_commande_paiement'));*/
+            return $this->redirect($this->generateUrl('Louvres_commande_paiement'));
         }
 
         return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(

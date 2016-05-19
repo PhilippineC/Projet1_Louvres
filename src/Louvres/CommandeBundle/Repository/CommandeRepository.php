@@ -10,4 +10,31 @@ namespace Louvres\CommandeBundle\Repository;
  */
 class CommandeRepository extends \Doctrine\ORM\EntityRepository
 {
+    CONST MAX_PLACES_PAR_JOUR = 1000;
+    function getDatesComplet()
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb->select('a.dateVisite');
+        $qb->groupby('a.dateVisite');
+        $qb->having('SUM(a.nbBillet) >= :maxPlaces');
+        $qb->setParameter('maxPlaces', self::MAX_PLACES_PAR_JOUR);
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+ /*   function getNbBillets()
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftjoin('c.billets', 'b')
+            ->addSelect('b')
+            ->
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+    }*/
 }

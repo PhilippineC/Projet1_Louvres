@@ -18,6 +18,12 @@ class Commande
      * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
+    CONST TARIF_NORMAL = 16;
+    CONST TARIF_ENF = 8;
+    CONST TARIF_SENIOR = 12;
+    CONST TARIF_REDUIT = 10;
+    CONST TARIF_FAMILLE = 35;
+
     private $billets;
     /**
      * @var int
@@ -266,6 +272,29 @@ class Commande
     public function getBillets()
     {
         return $this->billets;
+    }
+
+    public function calculPrixTotal()
+    {
+        foreach ($this->billets as $billet) {
+            if ($billet->reduit) {
+                $this->prixTotal =+ self::TARIF_REDUIT;
+            }
+            else {
+                switch ($billet->tarif) {
+                    case 'normal':
+                        $this->prixTotal =+ self::TARIF_NORMAL;
+                        break;
+                    case 'enfant':
+                        $this->prixTotal =+ self::TARIF_ENF;
+                        break;
+                    case 'senior':
+                        $this->prixTotal =+ self::TARIF_SENIOR;
+                        break;
+                }
+            }
+
+        }
     }
 
 }
