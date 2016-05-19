@@ -38,6 +38,14 @@ class CommandeController extends Controller
             $em->persist($commande);
             $em->flush();
 
+            /* Mettre ici les variables de entités à remplir ? */
+            $nbBillets = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('LouvresCommandeBundle:Commande')
+                ->getnbBillets($commande->getId());
+            var_dump($nbBillets);
+            $commande->setNbBillet($nbBillets);
             // On redirige vers la page de visualisation de l'annonce nouvellement créée
             return $this->redirect($this->generateUrl('Louvres_commande_paiement'));
         }
@@ -50,6 +58,8 @@ class CommandeController extends Controller
 
     public function paiementAction()
     {
+
+
         return $this->render('LouvresCommandeBundle:Commande:paiement.html.twig');
     }
 }

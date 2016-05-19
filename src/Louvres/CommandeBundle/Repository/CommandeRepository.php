@@ -25,16 +25,16 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
             ;
     }
 
- /*   function getNbBillets()
+/*    function getNbBillets($id)
     {
         $qb = $this->createQueryBuilder('c')
-            ->leftjoin('c.billets', 'b')
-            ->addSelect('b')
-            ->
+            ->addSelect('c')
+            ->innerJoin('c.billets', 'billet')
+            ->addSelect('COUNT(b.id) AS nbBillets')
+            ->groupBy('c.id')
+            ->where('c.id = :id_com')
+            ->setParameter('id_com', $id);
 
-        return $qb
-            ->getQuery()
-            ->getResult()
-            ;
+        return $qb->getQuery()->getSingleScalarResult();
     }*/
 }
