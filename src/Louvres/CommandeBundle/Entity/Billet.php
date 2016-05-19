@@ -226,11 +226,11 @@ class Billet
         return $this->commande;
     }
 
-    public function addCommande(Commande $commande) {
+/*    public function addCommande(Commande $commande) {
         if (!$this->commande->contains($commande)) {
             $this->commande->add($commande);
         }
-    }
+    }*/
 
 
     /**

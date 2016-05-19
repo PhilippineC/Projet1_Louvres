@@ -19,18 +19,19 @@ class CommandeController extends Controller
     {
     /*    $billets = new Billet();*/
          $commande = new Commande();
-        $commande->setDateCom(new \DateTime());
+         $commande->setDateCom(new \DateTime());
     /*    $commande->addBillet($billet1);*/
         $formCommande = $this->createForm(CommandeType::class, $commande);
 
         // On vérifie que les valeurs entrées sont correctes
         if ($formCommande->handleRequest($request)->isValid()) {
+            var_dump($commande);
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
             $em->flush();
 
             // On redirige vers la page de visualisation de l'annonce nouvellement créée
-            return $this->redirect($this->generateUrl('Louvres_commande_paiement'));
+        /*    return $this->redirect($this->generateUrl('Louvres_commande_paiement'));*/
         }
 
         return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(

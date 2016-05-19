@@ -321,19 +321,28 @@ hr {
     list-style: none;
 }
 
-#add_billet_link {
+.billet_link {
     color : #4e4e4e;
     padding-left: 22px;
     text-decoration: underline;
     font-weight: 700;
 }
 
-#add_billet_link:hover {
+a {
+    margin-top : 5px;
+}
+
+.billet_link:hover {
     font-style: italic;
+    color : #4e4e4e;
+}
+
+#formulaire_a_copier .billet_link {
+    font-size : 0.8em;
 }
 
 #formulaire_a_copier {
-    margin-bottom: 3px;
+ /*   margin-bottom: 3px;*/
 }
 
 /* Pour smartphones */

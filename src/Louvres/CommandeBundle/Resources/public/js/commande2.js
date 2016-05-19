@@ -65,7 +65,7 @@ $(function() {
                 $('.Journée').show('slow');
             }
         }
-    }
+    };
     $.datepicker.setDefaults($.datepicker.regional['fr']);
     $("#commande_dateVisite").datepicker().attr("readonly", "readonly");
 });
@@ -134,6 +134,46 @@ function CalculTarif(date) {
     var result = tarif;
     return result;
 }
+
+function verif_formulaire() {
+    $('.error').hide();
+    var inputs = $('.billets input');
+    console.log(inputs.length);
+    inputs.on('change keyup', function () {
+        // on traite les 3 types d'input : text, date_naissance et tarif_reduit
+        // D'abord la date de naissance qui détermine le tarif
+        if (this.id.endsWith('dateNaissance')) {
+            if (ValidateDate($(this).val())) {
+                if ($(this).parent().parent().find($('#billet_reduit')).is(':checked') == false) {
+                    /*   if ($(this).parent().parent().next().children().children().is(':checked') == false) {*/
+                    $(this).next().hide();
+                    $(this).next().next().hide();
+                    if (!(CalculTarif($(this).val()))) {
+                        $(this).next().show();
+                        $(this).next().next().show();
+                        $('#verif').show();
+                        $('#detail_commande').hide();
+                    }
+                }
+            }
+            else {
+                $(this).next().show();
+                $(this).next().next().show();
+            }
+        }
+        else if (this.id.endsWith('nom')) {// Pour les autres champs nom et prénom
+            if ($(this).val().length < 2) { // Si la taille du texte est inférieure à 2 caractères
+                $(this).next().show(); // On affiche le message d'erreur
+            }
+            else { // on le cache
+                $(this).next().hide();
+            }
+        }
+        // Si tous les champs sont remplis correctement, on peut afficher le détail et le tarif
+        FormulaireRempli(inputs);
+    });
+}
+
 
 /*Fonction pour valider les champs du formulaire une fois qu'il est complétement rempli*/
 /* et calculer les tarifs spéciaux (réduit, famille)*/
@@ -312,7 +352,7 @@ function Billet(index, nom, prenom, date_naissance, reduit) {
             }
         }
         return texte_retour;
-    }
+    };
     this.text = this.texte(this.tarif);
 }
 
@@ -332,7 +372,6 @@ $(function() {
     $('#commande_valider').hide();
     $('#info_visiteur').hide();
     $('#detail_commande').hide();
-/*    $('#formulaire_a_copier').hide();*/
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {
@@ -343,128 +382,75 @@ $(function() {
         if ($(':radio[class^="Demi"]:checked').val()) {
             $('#type_billet').text(' à partir de 14h');
         }
-    });
-/*    var nb_old = 1;
-    // Gestion des formulaires dès la selection du nombre de billets
-/*    $('#commande_nbBillet').change(function () { // selection du nombre de billets*/
- /*       $('#info_visiteur').show();*/
+
         $('#detail_commande').hide();
         $('#details_billets p').remove();
-        // On garde en mémoire le nb de formulaires précedemment selectionné pour gérer le delta
-        // On copie le formulaire à copier autant de fois qu'il y a de billets
-/*        var nb = $(this).val();
-        $('#nombre_billets').text(nb);*/
-/*        if (nb_old < nb) {
-           for (var i = nb_old; i < nb; i++) { /* Afficher les encarts renseignements en fonction du nbr de billets selectionnés*/
-/*                i = parseInt(i);
-                 $('#formulaire_a_copier').clone().attr('id', 'formulaire_' + (i + 1)).appendTo($('#billet')).show('slow');
-               $('div').find($('#formulaire_' + (i+1) + ' legend')).text('Billet n°' + (i + 1));
-             }
-            FormulaireRempli($('#billet input'));
-        }
-        else if (nb < nb_old) {
-            for (var i = nb; i < nb_old; i++) { /* Supprimer les encarts renseignements en trop*/
-/*                i = parseInt(i);
-                $('#formulaire_'+ (i + 1)).remove();
-            }
-            FormulaireRempli($('#billet input'));
-         }
-        nb_old = nb;*/
-        // On vérifie les champs saisies par l'utilisateur
-
-
-  /*  });*/
- /*   $('#btn-reset').click(function() {
-        console.log($('.pays select'));
-        for (var i = 0; i < $('#billet form').length; i++) {
-
-            $('#billet form')[i].reset();
-        }
-
-        $('.pays select').each(function () {
-            console.log($('.pays select').val());
-            $(this).value("FR");
-            console.log($('.pays select').val());
-        });
-    });*/
+    });
 });
 
 /* ******************** GERER LES FORMULAIRE AVEC COLLECTIONTYPE DE SYMFONY ********************** */
-var $collectionHolder;
-var $addBilletLink = $('<a href="#" id="add_billet_link" class="">Ajouter un billet</a>');
-var $newLinkLi = $('<div></div>').append($addBilletLink);
 
 $(function() {
-    // Get the ul that holds the collection of tags
-    $collectionHolder = $('div.billets');
+    var $container = $('div.billets');
+    // On ajoute un lien pour ajouter un nouveau billet
+    var $addLink = $('<a href="#" class="billet_link">Ajouter un billet</a>');
+    $container.append($addLink);
 
-    // add the "add a tag" anchor and li to the tags ul
-    $collectionHolder.append($newLinkLi);
-
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-    $addBilletLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // add a new tag form (see next code block)
-        addTagForm($collectionHolder, $newLinkLi);
-        $('.error').hide();
-        var inputs = $('.billets input');
-        console.log(inputs.length);
-        inputs.on('change keyup', function () {
-            // on traite les 3 types d'input : text, date_naissance et tarif_reduit
-            // D'abord la date de naissance qui détermine le tarif
-            if (this.id.endsWith('dateNaissance')) {
-                if (ValidateDate($(this).val())) {
-                    if ($(this).parent().parent().find($('#billet_reduit')).is(':checked') == false) {
-                        /*   if ($(this).parent().parent().next().children().children().is(':checked') == false) {*/
-                        $(this).next().hide();
-                        $(this).next().next().hide();
-                        if (!(CalculTarif($(this).val()))) {
-                            $(this).next().show();
-                            $(this).next().next().show();
-                            $('#verif').show();
-                            $('#detail_commande').hide();
-                        }
-                    }
-                }
-                else {
-                    $(this).next().show();
-                    $(this).next().next().show();
-                }
-            }
-            else if (this.id.endsWith('nom')) {// Pour les autres champs nom et prénom
-                if ($(this).val().length < 2) { // Si la taille du texte est inférieure à 2 caractères
-                    $(this).next().show(); // On affiche le message d'erreur
-                }
-                else { // on le cache
-                    $(this).next().hide();
-                }
-            }
-            // Si tous les champs sont remplis correctement, on peut afficher le détail et le tarif
-            FormulaireRempli(inputs);
-        });
+    // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+    $addLink.click(function (e) {
+        addCategory($container);
+        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+        verif_formulaire();
+        FormulaireRempli($('.billets input'));
+        return false;
     });
+
+    // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+    var index = $container.find(':input').length;
+
+    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+    if (index == 0) {
+        addCategory($container);
+    } else {
+        // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
+        $container.children('div').each(function () {
+            addDeleteLink($(this));
+        });
+    }
+
+    // La fonction qui ajoute un formulaire Categorie
+    function addCategory($container) {
+        // Dans le contenu de l'attribut « data-prototype », on remplace :
+        // - le texte "__name__label__" qu'il contient par le label du champ
+        // - le texte "__name__" qu'il contient par le numéro du champ
+        var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Billet n°' + (index+1))
+            .replace(/__name__/g, index));
+        // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+        addDeleteLink($prototype);
+        // On ajoute le prototype modifié à la fin de la balise <div>
+        $container.append($prototype);
+
+        // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+        index++;
+    }
+
+    // La fonction qui ajoute un lien de suppression d'une catégorie
+    function addDeleteLink($prototype) {
+        // Création du lien
+        $deleteLink = $('<a href="#" class="billet_link col-xs-offset-7 col-sm-offset-7">Supprimer ce billet</a>');
+        // Ajout du lien
+        $prototype.append($deleteLink);
+        // Ajout du listener sur le clic du lien
+        $deleteLink.click(function(e) {
+            $prototype.remove();
+            e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+            verif_formulaire();
+            FormulaireRempli($('.billets input'));
+            /* ****   */
+            return false;
+        });
+    }
+    verif_formulaire();
+    /*     */
+
 });
-
-function addTagForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype explained earlier
-    var prototype = $collectionHolder.data('prototype');
-
-    // get the new index
-    var index = $collectionHolder.data('index');
-
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    var newForm = prototype.replace(/__name__/g, index);
-
-    // increase the index with one for the next item
-    $collectionHolder.data('index', index + 1);
-
-    // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<div></div>').append(newForm);
-    $newLinkLi.before($newFormLi);
-}
