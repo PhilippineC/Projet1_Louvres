@@ -142,14 +142,14 @@ function FormulaireRempli(inputs) {
     var nb_form = inputs.length/NB_INPUTS;
     var inc = 0, Billets = {}, inputs_val = new Array(), commande;
     inputs.each(function (e) {
-        if (this.id == 'commande_billets_0_reduit') {
+        if (this.id.endsWith('reduit')) {
             inputs_val[e] = this.checked;
             inc++;
         }
         else {
             inputs_val[e] = $(this).val();
         }
-        if (this.id == 'commande_billets_0_dateNaissance') {
+        if (this.id.endsWith('dateNaissance')) {
             if (ValidateDate($(this).val())) {
                 inc++;
             }
@@ -326,11 +326,11 @@ $(function() {
 /* *********************PARTIE JQUERY MANIPULATION DU DOM *************** */
 
 // Au chargement de la page, on cache les messages d'erreur
-    $('.error').hide();
+
     $('#form_type_billet').hide();
 /*    $('#nbr_billet').hide();*/
     $('#commande_valider').hide();
-/*    $('#info_visiteur').hide();*/
+    $('#info_visiteur').hide();
     $('#detail_commande').hide();
 /*    $('#formulaire_a_copier').hide();*/
 
@@ -391,7 +391,7 @@ $(function() {
 
 /* ******************** GERER LES FORMULAIRE AVEC COLLECTIONTYPE DE SYMFONY ********************** */
 var $collectionHolder;
-var $addBilletLink = $('<a href="#" class="add_billet_link">Ajouter un billet</a>');
+var $addBilletLink = $('<a href="#" id="add_billet_link" class="">Ajouter un billet</a>');
 var $newLinkLi = $('<div></div>').append($addBilletLink);
 
 $(function() {
@@ -411,13 +411,13 @@ $(function() {
 
         // add a new tag form (see next code block)
         addTagForm($collectionHolder, $newLinkLi);
-
+        $('.error').hide();
         var inputs = $('.billets input');
         console.log(inputs.length);
         inputs.on('change keyup', function () {
             // on traite les 3 types d'input : text, date_naissance et tarif_reduit
             // D'abord la date de naissance qui détermine le tarif
-            if (this.id == 'commande_billets_0_dateNaissance') {
+            if (this.id.endsWith('dateNaissance')) {
                 if (ValidateDate($(this).val())) {
                     if ($(this).parent().parent().find($('#billet_reduit')).is(':checked') == false) {
                         /*   if ($(this).parent().parent().next().children().children().is(':checked') == false) {*/
@@ -436,7 +436,7 @@ $(function() {
                     $(this).next().next().show();
                 }
             }
-            else if ((this.id == 'commande_billets_0_nom') || (this.id == 'commande_billets_0_prenom')) {// Pour les autres champs de type text
+            else if (this.id.endsWith('nom')) {// Pour les autres champs nom et prénom
                 if ($(this).val().length < 2) { // Si la taille du texte est inférieure à 2 caractères
                     $(this).next().show(); // On affiche le message d'erreur
                 }
