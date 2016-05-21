@@ -23,35 +23,27 @@ class CommandeController extends Controller
             ->getManager()
             ->getRepository('LouvresCommandeBundle:Commande')
             ->getDatesComplet();
-        var_dump($datesComplet);
+        for ($i = 0; $i<count($datesComplet) ;$i++ ) {
+            $datesComplet[$i] = $datesComplet[$i]['dateVisite']->format('m-d-Y');
+        }
+        $datesComplet_JSON = json_encode($datesComplet);
 
-    /*    $billets = new Billet();*/
+
          $commande = new Commande();
-         $commande->setDateCom(new \DateTime());
-    /*    $commande->addBillet($billet1);*/
-        $formCommande = $this->createForm(CommandeType::class, $commande);
+         $formCommande = $this->createForm(CommandeType::class, $commande);
 
         // On vérifie que les valeurs entrées sont correctes
         if ($formCommande->handleRequest($request)->isValid()) {
-         /*   var_dump($commande);*/
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
             $em->flush();
 
-            /* Mettre ici les variables de entités à remplir ? */
-            $nbBillets = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('LouvresCommandeBundle:Commande')
-                ->getnbBillets($commande->getId());
-            var_dump($nbBillets);
-            $commande->setNbBillet($nbBillets);
-            // On redirige vers la page de visualisation de l'annonce nouvellement créée
             return $this->redirect($this->generateUrl('Louvres_commande_paiement'));
         }
 
         return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(
-            'formCommande' =>$formCommande->createView()
+            'formCommande' =>$formCommande->createView(),
+            'Dates_complet' => $datesComplet_JSON
         ));
     }
 

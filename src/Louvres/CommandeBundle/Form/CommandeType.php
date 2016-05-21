@@ -22,12 +22,11 @@ class CommandeType extends AbstractType
         $builder
             ->add('dateVisite', DateType::class, array(
                 'widget' =>'single_text',
-                'format' => 'dd-MM-yyyy',
+                'format' => 'dd/MM/yyyy', //yyyy/MM/dd
                 'html5' => false,
                 'attr' => array(
-                    'class' => 'col-sm-6 col-md-5 col-lg-4',
                     'data-provide' => 'datepicker',
-                    'data-date-format' => 'dd-mm-yyyy'
+                 /*   'data-date-format' => 'dd-mm-yyyy'*/
                 )
             ))
             ->add('typeBillet', ChoiceType::class, array(
@@ -54,7 +53,6 @@ class CommandeType extends AbstractType
             ))
             ->add('valider', SubmitType::class, array(
                 'attr' => array('class' => 'valider')))
-        /*    ->add('prixTotal')*/
          /*   ->add('mail')*/
         ;
     }

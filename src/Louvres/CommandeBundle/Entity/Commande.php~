@@ -2,6 +2,7 @@
 
 namespace Louvres\CommandeBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,14 +11,29 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="commande")
  * @ORM\Entity(repositoryClass="Louvres\CommandeBundle\Repository\CommandeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Commande
 {
+
+    CONST TARIF_NORMAL = 16;
+    CONST TARIF_ENF = 8;
+    CONST TARIF_SENIOR = 12;
+    CONST TARIF_REDUIT = 10;
+    CONST TARIF_FAMILLE = 35;
+
     /**
      * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
+
     private $billets;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Email", cascade={"persist"})
+     */
+    private $email;
+
     /**
      * @var int
      *
@@ -25,6 +41,7 @@ class Commande
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+
     private $id;
 
     /**
@@ -51,29 +68,28 @@ class Commande
     /**
      * @var int
      * @Assert\Range(min=1, max=7)
-     * @ORM\Column(name="nb_billet", type="integer")
+     * @ORM\Column(name="nb_billet", type="integer", nullable=true)
      */
     private $nbBillet;
 
     /**
      * @var int
-     * @ORM\Column(name="prix_total", type="integer")
+     * @ORM\Column(name="prix_total", type="integer", nullable=true)
      */
     private $prixTotal;
 
     /**
      * @var string
-     * @Assert\Email()
-     * @ORM\Column(name="mail", type="string", length=255)
+     * @ORM\Column(name="status", type="string", length=255, nullable=true)
      */
-    private $mail;
+    private $status;
 
 
     public function __construct()
     {
         $this->dateCom = new \Datetime();
-        $this->setPrixTotal(0);
-        $this->setMail('ppp@pppp.com');
+        $this->setStatus('en cours');
+        $this->billets = new ArrayCollection();
     }
 
     /**
@@ -207,30 +223,6 @@ class Commande
     }
 
     /**
-     * Set mail
-     *
-     * @param string $mail
-     *
-     * @return Commande
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return string
-     */
-    public function getMail()
-    {
-        return $this->mail;
-    }
-
-    /**
      * Add billet
      *
      * @param \Louvres\CommandeBundle\Entity\Billet $billet
@@ -239,6 +231,7 @@ class Commande
      */
     public function addBillet(\Louvres\CommandeBundle\Entity\Billet $billet)
     {
+    /*    $this->billets->add($billet);*/
         $this->billets[] = $billet;
         // On lie le billet à la commande
         $billet->setCommande($this);
@@ -265,4 +258,51 @@ class Commande
         return $this->billets;
     }
 
+    public function calculPrixTotal()
+    {
+        foreach ($this->billets as $billet) {
+            if ($billet->reduit) {
+                $this->prixTotal =+ self::TARIF_REDUIT;
+            }
+            else {
+                switch ($billet->tarif) {
+                    case 'normal':
+                        $this->prixTotal =+ self::TARIF_NORMAL;
+                        break;
+                    case 'enfant':
+                        $this->prixTotal =+ self::TARIF_ENF;
+                        break;
+                    case 'senior':
+                        $this->prixTotal =+ self::TARIF_SENIOR;
+                        break;
+                }
+            }
+
+        }
+    }
+
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Commande
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

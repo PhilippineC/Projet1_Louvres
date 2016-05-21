@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="billet")
  * @ORM\Entity(repositoryClass="Louvres\CommandeBundle\Repository\BilletRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Billet
 {
@@ -64,10 +65,25 @@ class Billet
 
     /**
      * @var string
-     * @ORM\Column(name="tarif", type="string")
+     * @ORM\Column(name="tarif", type="string", nullable=true)
      */
     private $tarif;
 
+    /**
+     * @var int
+     * @ORM\Column(name="meme_nom", type="int")
+     */
+    private $memeNom;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="famille", type="boolean")
+     */
+    private $famille;
+
+    public function __construct() {
+
+    }
 
     /**
      * Get id
@@ -223,47 +239,6 @@ class Billet
         return $this->commande;
     }
 
-    public function calculTarif() {
-        $today = new \DateTime();
-        $date_normal = $today->sub(new \DateInterval('P12Y'));
-        $date_enfant = $today->sub(new \DateInterval('P4Y'));
-        $date_senior = $today->sub(new \DateInterval('P60Y'));
-
-        if (($this->dateNaissance > $date_enfant) && ($this->dateNaissance <= $today)) {
-            $this->setTarif('enfant');
-        }
-
-        /*    date = date.split("/").reverse().join("/");
-            var tarif;
-            var age_normal = 12, age_enfant = 4, age_senior = 60, age_old = 110;
-            var date_normal, date_enfant, date_senior, date_old, today = new Date(), date_enr = new Date(date);
-            date_normal = new Date(today.getFullYear() - age_normal, today.getMonth(), today.getDate());
-            date_enfant = new Date(today.getFullYear() - age_enfant, today.getMonth(), today.getDate());
-            date_senior = new Date(today.getFullYear() - age_senior, today.getMonth(), today.getDate());
-            date_old = new Date(today.getFullYear() - age_old, today.getMonth(), today.getDate());
-            if ((date_enr > date_enfant) && (date_enr <= today)) {
-                tarif ='gratuit';
-            }
-            else if (date_enr <= date_old) {
-                return false;
-            }
-            else if (date_enr <= date_senior) {
-                tarif ='sénior';
-
-            }
-            else if (date_enr <= date_normal) {
-                tarif ='normal';
-            }
-            else if (date_enr <= date_enfant) {
-                tarif ='enfant';
-            }
-            else {
-                return false;
-            }
-            var result = tarif;
-            return result;*/
-    }
-
     /**
      * Set tarif
      *
@@ -271,7 +246,7 @@ class Billet
      *
      * @return Billet
      */
-    public function setTarif(\string $tarif)
+    public function setTarif($tarif)
     {
         $this->tarif = $tarif;
 
@@ -286,5 +261,30 @@ class Billet
     public function getTarif()
     {
         return $this->tarif;
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function calculTarif() {
+        $today = new \DateTime();
+        $datenormal = new \DateTime();
+        $date_enfant = new \DateTime();
+        $date_senior = new \DateTime();
+        $date_normal = $datenormal->sub(new \DateInterval('P12Y'));
+        $date_enfant = $date_enfant->sub(new \DateInterval('P4Y'));
+        $date_senior = $date_senior->sub(new \DateInterval('P60Y'));
+        if (($this->dateNaissance > $date_enfant) && ($this->dateNaissance <= $today)) {
+            $this->setTarif('gratuit');
+        }
+        elseif ($this->dateNaissance <= $date_senior) {
+            $this->setTarif('senior');
+        }
+        else if ($this->dateNaissance <= $date_normal) {
+            $this->setTarif('normal');
+        }
+        else if ($this->dateNaissance <= $date_enfant)  {
+            $this->setTarif('enfant');
+        }
     }
 }

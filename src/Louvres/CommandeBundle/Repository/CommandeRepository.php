@@ -10,14 +10,15 @@ namespace Louvres\CommandeBundle\Repository;
  */
 class CommandeRepository extends \Doctrine\ORM\EntityRepository
 {
-    CONST MAX_PLACES_PAR_JOUR = 1000;
+    CONST MAX_PLACES_PAR_JOUR = 3;
     function getDatesComplet()
     {
-        $qb = $this->createQueryBuilder('a');
-        $qb->select('a.dateVisite');
-        $qb->groupby('a.dateVisite');
-        $qb->having('SUM(a.nbBillet) >= :maxPlaces');
-        $qb->setParameter('maxPlaces', self::MAX_PLACES_PAR_JOUR);
+        $qb = $this->createQueryBuilder('a')
+            ->select('a.dateVisite')
+            ->where('a.status = :paye')
+            ->groupby('a.dateVisite')
+            ->having('SUM(a.nbBillet) >= :maxPlaces')
+            ->setParameters(array('paye' => 'paye', 'maxPlaces' => self::MAX_PLACES_PAR_JOUR));
 
         return $qb
             ->getQuery()
@@ -25,16 +26,23 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
             ;
     }
 
-/*    function getNbBillets($id)
+    function getNbBillets($id)
     {
-        $qb = $this->createQueryBuilder('c')
-            ->addSelect('c')
-            ->innerJoin('c.billets', 'billet')
-            ->addSelect('COUNT(b.id) AS nbBillets')
+       /* $qb = $this->createQueryBuilder('c')
+        /*    ->addSelect('c')*/
+       /*     ->innerJoin('c.billets', 'b')
+        /*    ->addSelect('b')*/
+        /*    ->addselect('COUNT(b.id) AS nbBillets')
             ->groupBy('c.id')
             ->where('c.id = :id_com')
             ->setParameter('id_com', $id);
+        return $qb->getQuery()->getSingleScalarResult();*/
 
+        $qb = $this->createQueryBuilder('c')
+            ->innerJoin('c.billets', 'b')
+            ->select('COUNT(b.id) AS nbBillets')
+            ->where('c.id = :id_com')
+            ->setParameter('id_com', $id);
         return $qb->getQuery()->getSingleScalarResult();
-    }*/
+    }
 }

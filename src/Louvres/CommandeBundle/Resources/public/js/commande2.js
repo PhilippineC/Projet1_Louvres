@@ -1,11 +1,33 @@
 
 
 /* ******************** DATEPICKER ********************************* */
+var disableddates_ferie = ["5-1-2016","11-1-2016", "12-25-2016", "5-28-2016"];
+var disableddatesComplet = $('.disableddatesComplet').text(); // On récupère les dates complet
 
-// Développer une fonction qui ira chercher dans la BDD les jours complet pour les retourner//
-var disableddates = ["5-1-2016","11-1-2016", "12-25-2016"];
+//on enlève les guillements
+disableddatesComplet = disableddatesComplet.substr(1);
+disableddatesComplet = disableddatesComplet.substr(0,disableddatesComplet.length-1);
+//on crée un tableau
+disableddatesComplet = disableddatesComplet.split(',');
+
+for (var i = 0; i <disableddatesComplet.length; i++) {
+    disableddatesComplet[i] = disableddatesComplet[i].substr(1);//on enlève les guillements de chq coté
+    disableddatesComplet[i] = disableddatesComplet[i].substr(0,disableddatesComplet[i].length-1);
+
+    if (disableddatesComplet[i].substr(3,1) == 0) {// on enlève les éventuelles 0 dans le mois
+        var disableddatesComplet_sansmois = disableddatesComplet[i].substr(0,3) + disableddatesComplet[i].substring(4) ;
+        disableddatesComplet[i] = disableddatesComplet_sansmois;
+    }
+
+    if (disableddatesComplet[i].substr(0,1) == 0) {// on enlève les éventuelles 0 dans le jour
+        disableddatesComplet[i] = disableddatesComplet[i].substr(1,12);
+    }
+}
+
+var disableddates = (typeof disableddatesComplet === 'undefined') ? disableddates_ferie : disableddates_ferie.concat(disableddatesComplet);
+console.log(disableddates);
+
 function DisableSpecificDates(date) {
-
     var m = date.getMonth();
     var d = date.getDate();
     var y = date.getFullYear();
@@ -49,7 +71,6 @@ $(function() {
             $("#date_selectionnee").replaceWith('<p id="date_selectionnee"> Vous avez selectionné le ' + date_select + '.</p>');
             $("#jour_visite").text(date_select);
             $('#form_type_billet').show('slow');
-            $('#nbr_billet').show('slow');
             $('#info_visiteur').show('slow');
             /*récupérer l'heure du jour si la réservation se fait le jour même*/
             var today = new Date();
@@ -200,13 +221,13 @@ function FormulaireRempli(inputs) {
             }
         }
     });
-    if (inc ==  inputs.length) {
+    if ((inc ==  inputs.length) && (inputs.length != 0)) {
         // Tous les champs sont remplis, on crée les objets
         for (var i = 0; i < nb_form; i++) { //index, prenom, nom, date_naissance, tarif_reduit
             Billets[i] = new Billet(i,inputs_val[i*NB_INPUTS], inputs_val[i*NB_INPUTS+1], inputs_val[i*NB_INPUTS+2], inputs_val[i*NB_INPUTS+3]);
         }
         // On calcule le tarif famille
-        var normal = 0, enfant = 0, x = 0;
+        var normal = 0, enfant = 0;
         var decr_enf = 2, decr_norm = 2;
         for (var i = 0; i<nb_form; i++) {
             for (var j = 0; j < nb_form; j++) {
@@ -366,16 +387,14 @@ $(function() {
 /* *********************PARTIE JQUERY MANIPULATION DU DOM *************** */
 
 // Au chargement de la page, on cache les messages d'erreur
-
+    $('.max7billets').hide();
     $('#form_type_billet').hide();
-/*    $('#nbr_billet').hide();*/
     $('#commande_valider').hide();
     $('#info_visiteur').hide();
     $('#detail_commande').hide();
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {
-        $('#nbr_billet').show('slow');
         if ($(':radio.Journée:checked').val()) {
             $('#type_billet').text(' pour la journée');
         }
@@ -393,22 +412,32 @@ $(function() {
 $(function() {
     var $container = $('div.billets');
     // On ajoute un lien pour ajouter un nouveau billet
-    var $addLink = $('<a href="#" class="billet_link">Ajouter un billet</a>');
+    var $addLink = $('<a href="#" class="billet_link"><span class="glyphicon glyphicon-plus"></span>  Ajouter un billet</a>');
     $container.append($addLink);
+    // On ajoute un message pour dire qu'on ne peut pas commander plus de 7 billet par commande
+    $avertissement = $('<div><span class="max7billets">Vous ne pouvez pas commander plus de 7 billets par commande.</span></div>');
+    $('.billet_link').after($avertissement);
+    $('.max7billets').hide();
 
     // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
     $addLink.click(function (e) {
-        addCategory($container);
-        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-        verif_formulaire();
-        FormulaireRempli($('.billets input'));
-        return false;
+        if (index == 7) {
+            $('.max7billets').fadeIn(1500, 'linear').fadeOut(1200, 'swing');
+            return false;
+        }
+        else {
+            addCategory($container);
+            e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+            verif_formulaire();
+            FormulaireRempli($('.billets input'));
+            return false;
+        }
     });
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var index = $container.find(':input').length;
 
-    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un.
     if (index == 0) {
         addCategory($container);
     } else {
@@ -444,6 +473,7 @@ $(function() {
         $deleteLink.click(function(e) {
             $prototype.remove();
             e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+            index--;
             verif_formulaire();
             FormulaireRempli($('.billets input'));
             /* ****   */
@@ -451,6 +481,6 @@ $(function() {
         });
     }
     verif_formulaire();
-    /*     */
+
 
 });

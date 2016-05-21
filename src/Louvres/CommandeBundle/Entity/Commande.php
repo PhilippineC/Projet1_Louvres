@@ -11,20 +11,32 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="commande")
  * @ORM\Entity(repositoryClass="Louvres\CommandeBundle\Repository\CommandeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Commande
 {
-    /**
-     * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+
     CONST TARIF_NORMAL = 16;
     CONST TARIF_ENF = 8;
     CONST TARIF_SENIOR = 12;
     CONST TARIF_REDUIT = 10;
     CONST TARIF_FAMILLE = 35;
+    CONST MEMBRES_MEME_FAMILLE = 4;
+    CONST MEMBRES_FAMILLE_ENF = 2;
+    CONST MEMBRES_FAMILLE_NORM = 2;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
 
     private $billets;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Email", cascade={"persist"})
+     */
+    private $email;
+
     /**
      * @var int
      *
@@ -32,6 +44,7 @@ class Commande
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+
     private $id;
 
     /**
@@ -58,30 +71,28 @@ class Commande
     /**
      * @var int
      * @Assert\Range(min=1, max=7)
-     * @ORM\Column(name="nb_billet", type="integer")
+     * @ORM\Column(name="nb_billet", type="integer", nullable=true)
      */
-    private $nbBillet = 1;
+    private $nbBillet;
 
     /**
      * @var int
      * @ORM\Column(name="prix_total", type="integer")
      */
-    private $prixTotal;
+    private $prixTotal = 0;
 
     /**
      * @var string
-     * @Assert\Email()
-     * @ORM\Column(name="mail", type="string", length=255)
+     * @ORM\Column(name="status", type="string", length=255, nullable=true)
      */
-    private $mail;
+    private $status;
 
 
     public function __construct()
     {
         $this->dateCom = new \Datetime();
+        $this->setStatus('en_cours');
         $this->billets = new ArrayCollection();
-        $this->setPrixTotal(0);
-        $this->setMail('ppp@pppp.com');
     }
 
     /**
@@ -191,16 +202,29 @@ class Commande
     }
 
     /**
+     * Add prixTotal
+     *
+     * @param integer $prixTotal
+     *
+     * @return Commande
+     */
+    public function addPrixTotal($prixTotal)
+    {
+        $this->prixTotal += $prixTotal;
+
+        return $this;
+    }
+
+    /**
      * Set prixTotal
      *
      * @param integer $prixTotal
      *
      * @return Commande
      */
-    public function setPrixTotal($prixTotal)
+    public function SetPrixTotal($prixTotal)
     {
         $this->prixTotal = $prixTotal;
-
         return $this;
     }
 
@@ -215,30 +239,6 @@ class Commande
     }
 
     /**
-     * Set mail
-     *
-     * @param string $mail
-     *
-     * @return Commande
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return string
-     */
-    public function getMail()
-    {
-        return $this->mail;
-    }
-
-    /**
      * Add billet
      *
      * @param \Louvres\CommandeBundle\Entity\Billet $billet
@@ -247,7 +247,6 @@ class Commande
      */
     public function addBillet(\Louvres\CommandeBundle\Entity\Billet $billet)
     {
-    /*    $this->billets->add($billet);*/
         $this->billets[] = $billet;
         // On lie le billet à la commande
         $billet->setCommande($this);
@@ -274,27 +273,130 @@ class Commande
         return $this->billets;
     }
 
-    public function calculPrixTotal()
-    {
-        foreach ($this->billets as $billet) {
-            if ($billet->reduit) {
-                $this->prixTotal =+ self::TARIF_REDUIT;
+    /**
+     * @ORM\PostPersist
+     */
+    public function calculTarifFamille() {
+        $normal = 0; $enfant = 0;
+        $decr_enf = self::MEMBRES_FAMILLE_ENF; $decr_norm = self::MEMBRES_FAMILLE_NORM;
+        foreach ($this->billets as $billet1) {
+            $billet1->setMemeNom(1); // On réinitialise à chaque calcul du tarif famille
+            foreach ($this->billets as $billet2) {
+                if ($billet1 !== $billet2) {
+                    if ($billet1->getNom() == $billet2->getNom()) {
+                        $billet1->incMemeNom();
+                    }
+                }
             }
-            else {
-                switch ($billet->tarif) {
-                    case 'normal':
-                        $this->prixTotal =+ self::TARIF_NORMAL;
+            if ($billet1->getMemeNom() >= self::MEMBRES_MEME_FAMILLE) {
+                switch ($billet1->getTarif()) {
+                    case Billet::BILLET_NORM:
+                        $normal++;
                         break;
-                    case 'enfant':
-                        $this->prixTotal =+ self::TARIF_ENF;
-                        break;
-                    case 'senior':
-                        $this->prixTotal =+ self::TARIF_SENIOR;
+                    case Billet::BILLET_ENF:
+                        $enfant++;
                         break;
                 }
             }
+        }
 
+        if (($normal > 1) && ($enfant > 1)) {
+            foreach ($this->billets as $billet) {
+                if ($billet->getMemeNom() >= self::MEMBRES_MEME_FAMILLE) {
+                    if (($billet->getTarif() == Billet::BILLET_ENF) && ($decr_enf > 0)) {
+                        $billet->setTarif(Billet::BILLET_FAMILLE);
+                        $billet->setFamille(true);
+                        $decr_enf --;
+                    }
+                    if (($billet->getTarif() == Billet::BILLET_NORM) && ($decr_norm > 0)) {
+                        $billet->setTarif(Billet::BILLET_FAMILLE);
+                        $billet->setFamille(true);
+                        $decr_norm --;
+                    }
+                }
+            }
         }
     }
 
+    /**
+     * @ORM\PostPersist
+     */
+    public function calculPrixTotal()
+    {
+        $this->setPrixTotal(0); // On réinitialise le prix de la commande à chaque calcul
+        $nb_tarif_famille = 0; // Un seul billet famille par commande
+        foreach ($this->billets as $billet) {
+            if ($billet->getFamille()) {
+                if ($nb_tarif_famille == 0) {
+                    $this->addPrixTotal(self::TARIF_FAMILLE);
+                    $nb_tarif_famille ++;
+                }
+            }
+            elseif ($billet->getReduit()) {
+                $this->addPrixTotal(self::TARIF_REDUIT);
+            }
+            else {
+                switch ($billet->getTarif()) {
+                    case Billet::BILLET_NORM:
+                        $this->addPrixTotal(self::TARIF_NORMAL);
+                        break;
+                    case Billet::BILLET_ENF:
+                        $this->addPrixTotal(self::TARIF_ENF);
+                        break;
+                    case Billet::BILLET_SENIOR:
+                        $this->addPrixTotal(self::TARIF_SENIOR);
+                        break;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Commande
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set email
+     *
+     * @param \Louvres\CommandeBundle\Entity\Email $email
+     *
+     * @return Commande
+     */
+    public function setEmail(\Louvres\CommandeBundle\Entity\Email $email = null)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return \Louvres\CommandeBundle\Entity\Email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
 }

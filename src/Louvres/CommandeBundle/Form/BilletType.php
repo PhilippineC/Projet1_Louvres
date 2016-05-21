@@ -36,7 +36,9 @@ class BilletType extends AbstractType
                         'placeholder' => 'Prénom'
                     ))
             )
-            ->add('pays', CountryType::class)
+            ->add('pays', CountryType::class, array(
+                'data' => 'FR'
+            ))
 
             ->add('dateNaissance', DateType::class, array(
                     'widget' => 'single_text',
