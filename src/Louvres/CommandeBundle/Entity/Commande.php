@@ -273,10 +273,12 @@ class Commande
         return $this->billets;
     }
 
-    /**
+     /**
      * @ORM\PostPersist
      */
-    public function calculTarifFamille() {
+    public function calculPrixTotal()
+    {
+        /* On détermine d'abord l'attribut famille à false ou true en fonction des tarifs de la commande*/
         $normal = 0; $enfant = 0;
         $decr_enf = self::MEMBRES_FAMILLE_ENF; $decr_norm = self::MEMBRES_FAMILLE_NORM;
         foreach ($this->billets as $billet1) {
@@ -316,13 +318,7 @@ class Commande
                 }
             }
         }
-    }
-
-    /**
-     * @ORM\PostPersist
-     */
-    public function calculPrixTotal()
-    {
+        /* On peut ensuite calculer le prix total de la commande */
         $this->setPrixTotal(0); // On réinitialise le prix de la commande à chaque calcul
         $nb_tarif_famille = 0; // Un seul billet famille par commande
         foreach ($this->billets as $billet) {

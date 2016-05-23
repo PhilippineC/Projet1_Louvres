@@ -50,8 +50,6 @@ class CommandeController extends Controller
 
     public function paiementAction()
     {
-
-
         return $this->render('LouvresCommandeBundle:Commande:paiement.html.twig');
     }
 }

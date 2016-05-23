@@ -23,7 +23,6 @@ class ParamCommande {
             ->getNbBillets($entity->getCommande()->getId());
         $entity->getCommande()->setNbBillet($nbBillets);
 
-        $entity->getCommande()->calculTarifFamille();
         $entity->getCommande()->calculPrixTotal();
         $em->flush();
     }

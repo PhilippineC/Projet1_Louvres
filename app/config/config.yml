@@ -73,3 +73,29 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+
+#payum:
+#    storages:
+#        Louvres\CommandeBundle\Entity\Payment: { doctrine: orm }
+ #       Louvres\CommandeBundle\Entity\PaymentDetails: { doctrine: orm }
+
+#    security:
+#        token_storage:
+#            Louvres\CommandeBundle\Entity\PaymentToken: { doctrine: orm }
+
+
+
+#    gateways:
+#        tickets_by_paypal:
+#            factory: paypal_express_checkout
+ #           username:  '%payum.paypal.username%'
+  #          password:  '%payum.paypal.password%'
+   #         signature: '%payum.paypal.signature%'
+    #        sandbox: '%payum.paypal.sandbox%'
+
+
+#        tickets_by_stripe:
+ #           factory: stripe_checkout
+  #          publishable_key: '%payum.stripe.publishable_key%'
+   #         secret_key:      '%payum.stripe.secret_key%'
+    #        payum.template.obtain_token: 'LOUVREAppBundle:App:obtain_checkout_token.html.twig'
