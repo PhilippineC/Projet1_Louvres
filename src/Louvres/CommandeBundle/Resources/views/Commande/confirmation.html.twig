@@ -1,0 +1,104 @@
+{% extends "LouvresCommandeBundle::layout.html.twig" %}
+
+{% block title %}
+    Confirmation de votre commande
+{% endblock %}
+
+{% block nav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            {% for message in app.session.flashbag.get('info') %}
+                <div class="alert alert-success text-center">{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
+     <!-- encart gris : Confirmation -->
+    <div class="encart_gris">
+        <div class="container-fluid">
+            <p>Confirmation de votre commande</p>
+        </div>
+    </div>
+
+    <!-- Récapitulatif  -->
+    <div id="prix_total">
+        <div id="detail_commande">
+            <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }} pour la {{ commande.typeBillet}}</p>
+            <p>Nombre de billet(s) : {{ commande.nbBillet }}</p>
+            <p> Détail des billet(s) : </p>
+            <div id="details_billets">
+                {% for billet in commande.billets %}
+                    <p>{{ billet.nom }} {{ billet.prenom }} : billet tarif {{ billet.tarifCalcule }} </p>
+                {% endfor %}
+            </div>
+            <p id ="total_commande"><strong>Total de la commande : {{ commande.prixTotal }} €</strong></p>
+        </div>
+    </div>
+
+    <div>
+        {{ form_start(form, {'action': path('Louvres_commande_confirmation', {'code' : commande.code} )}) }}
+        {{ form_errors(form) }}
+
+        <!-- encart gris : Email -->
+        <div class="encart_gris">
+            <div class="container-fluid">
+                <p>1. Saisissez votre adresse email</p>
+            </div>
+        </div>
+
+        <!-- Email  -->
+        <div class="email">
+            <div class="container row">
+                <p>Vos billets vous seront envoyés par email.</p>
+                <div class="form-group input_form col-xs-12 col-sm-5">
+                    {{ form_widget(form.mail, {'attr': {'class': 'form-control input-sm'}}) }}
+                    <span class="error">{{ form_errors(form.mail) }} </span>
+                </div>
+             </div>
+         </div>
+
+        <!-- encart gris : Paiement -->
+        <div class="encart_gris">
+            <div class="container-fluid">
+                <p>2. Choisissez votre mode de paiement</p>
+            </div>
+        </div>
+
+        <!-- paiement  -->
+        <div class="paiement">
+            <div class="container row">
+                <div id="form_type_billet">
+                     {% for child in form.moyenPaiement %}
+                        <div class="radio">
+                            {{ form_widget(child, {'attr': {'class': child.vars.label}}) }}
+                            {{ child.vars.label }}
+                        </div>
+                    {% endfor %}
+                {{ form_errors(form.moyenPaiement) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- encart gris : Valider -->
+        <div class="encart_gris">
+            <div class="container-fluid">
+                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-default btn-sm col-sm-offset-4', 'id' : 'btn-valider'}}) }}
+            </div>
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}
+

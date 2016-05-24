@@ -89,6 +89,12 @@ class Billet
      */
     private $famille = false;
 
+    /**
+     * @var string
+     * @ORM\Column(name="tarif_calcule", type="string", nullable=true)
+     */
+    private $tarifCalcule;
+
     public function __construct() {
 
     }
@@ -355,5 +361,29 @@ class Billet
     public function getFamille()
     {
         return $this->famille;
+    }
+
+    /**
+     * Set tarifCalcule
+     *
+     * @param string $tarifCalcule
+     *
+     * @return Billet
+     */
+    public function setTarifCalcule($tarifCalcule)
+    {
+        $this->tarifCalcule = $tarifCalcule;
+
+        return $this;
+    }
+
+    /**
+     * Get tarifCalcule
+     *
+     * @return string
+     */
+    public function getTarifCalcule()
+    {
+        return $this->tarifCalcule;
     }
 }

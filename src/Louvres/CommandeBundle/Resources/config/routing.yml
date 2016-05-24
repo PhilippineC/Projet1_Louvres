@@ -2,6 +2,24 @@ Louvres_commande_home:
         path:     /
         defaults: { _controller: LouvresCommandeBundle:Commande:home }
 
-Louvres_commande_paiement:
-        path:     /paiement
-        defaults: { _controller: LouvresCommandeBundle:Commande:paiement }
+Louvres_commande_confirmation:
+        path:     /confirmation/{code}
+        defaults: { _controller: LouvresCommandeBundle:Commande:confirmation }
+        requirements:
+            code : (L)([0-9]{4})([A-Z]{4})
+
+Louvres_commande_paiement_paypal:
+        path:     /paiement/paypal/{code}
+        defaults: { _controller: LouvresCommandeBundle:Payment:preparePaypalExpressCheckoutPayment }
+        requirements:
+            code : (L)([0-9]{4})([A-Z]{4})
+
+Louvres_commande_paiement_stripe:
+        path:     /paiement/stripe/{code}
+        defaults: { _controller: LouvresCommandeBundle:Payment:prepareStripePayment }
+        requirements:
+            code : (L)([0-9]{4})([A-Z]{4})
+
+Louvres_commande_paiement_done:
+        path:     /paiement_done
+        defaults: { _controller: LouvresCommandeBundle:Payment:captureDone }

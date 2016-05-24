@@ -21,6 +21,9 @@ class Commande
     CONST TARIF_SENIOR = 12;
     CONST TARIF_REDUIT = 10;
     CONST TARIF_FAMILLE = 35;
+    CONST MEMBRES_MEME_FAMILLE = 4;
+    CONST MEMBRES_FAMILLE_ENF = 2;
+    CONST MEMBRES_FAMILLE_NORM = 2;
 
     /**
      * @ORM\OneToMany(targetEntity="Louvres\CommandeBundle\Entity\Billet", mappedBy="commande", cascade={"persist"})
@@ -30,10 +33,17 @@ class Commande
     private $billets;
 
     /**
-     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Email", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Confirmation", cascade={"persist"})
      */
-    private $email;
+    private $confirmation;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255)
+     */
+
+    private $code;
     /**
      * @var int
      *
@@ -74,9 +84,9 @@ class Commande
 
     /**
      * @var int
-     * @ORM\Column(name="prix_total", type="integer", nullable=true)
+     * @ORM\Column(name="prix_total", type="integer")
      */
-    private $prixTotal;
+    private $prixTotal = 0;
 
     /**
      * @var string
@@ -88,7 +98,7 @@ class Commande
     public function __construct()
     {
         $this->dateCom = new \Datetime();
-        $this->setStatus('en cours');
+        $this->setStatus('en_cours');
         $this->billets = new ArrayCollection();
     }
 
@@ -199,16 +209,29 @@ class Commande
     }
 
     /**
+     * Add prixTotal
+     *
+     * @param integer $prixTotal
+     *
+     * @return Commande
+     */
+    public function addPrixTotal($prixTotal)
+    {
+        $this->prixTotal += $prixTotal;
+
+        return $this;
+    }
+
+    /**
      * Set prixTotal
      *
      * @param integer $prixTotal
      *
      * @return Commande
      */
-    public function setPrixTotal($prixTotal)
+    public function SetPrixTotal($prixTotal)
     {
         $this->prixTotal = $prixTotal;
-
         return $this;
     }
 
@@ -231,7 +254,6 @@ class Commande
      */
     public function addBillet(\Louvres\CommandeBundle\Entity\Billet $billet)
     {
-    /*    $this->billets->add($billet);*/
         $this->billets[] = $billet;
         // On lie le billet à la commande
         $billet->setCommande($this);
@@ -258,26 +280,77 @@ class Commande
         return $this->billets;
     }
 
+     /**
+     * @ORM\PostPersist
+     */
     public function calculPrixTotal()
     {
-        foreach ($this->billets as $billet) {
-            if ($billet->reduit) {
-                $this->prixTotal =+ self::TARIF_REDUIT;
+        /* On détermine d'abord l'attribut famille à false ou true en fonction des tarifs de la commande*/
+        $normal = 0; $enfant = 0;
+        $decr_enf = self::MEMBRES_FAMILLE_ENF; $decr_norm = self::MEMBRES_FAMILLE_NORM;
+        foreach ($this->billets as $billet1) {
+            $billet1->setMemeNom(1); // On réinitialise à chaque calcul du tarif famille
+            foreach ($this->billets as $billet2) {
+                if ($billet1 !== $billet2) {
+                    if ($billet1->getNom() == $billet2->getNom()) {
+                        $billet1->incMemeNom();
+                    }
+                }
             }
-            else {
-                switch ($billet->tarif) {
-                    case 'normal':
-                        $this->prixTotal =+ self::TARIF_NORMAL;
+            if ($billet1->getMemeNom() >= self::MEMBRES_MEME_FAMILLE) {
+                switch ($billet1->getTarif()) {
+                    case Billet::BILLET_NORM:
+                        $normal++;
                         break;
-                    case 'enfant':
-                        $this->prixTotal =+ self::TARIF_ENF;
-                        break;
-                    case 'senior':
-                        $this->prixTotal =+ self::TARIF_SENIOR;
+                    case Billet::BILLET_ENF:
+                        $enfant++;
                         break;
                 }
             }
+        }
 
+        if (($normal > 1) && ($enfant > 1)) {
+            foreach ($this->billets as $billet) {
+                if ($billet->getMemeNom() >= self::MEMBRES_MEME_FAMILLE) {
+                    if (($billet->getTarif() == Billet::BILLET_ENF) && ($decr_enf > 0)) {
+                        $billet->setTarif(Billet::BILLET_FAMILLE);
+                        $billet->setFamille(true);
+                        $decr_enf --;
+                    }
+                    if (($billet->getTarif() == Billet::BILLET_NORM) && ($decr_norm > 0)) {
+                        $billet->setTarif(Billet::BILLET_FAMILLE);
+                        $billet->setFamille(true);
+                        $decr_norm --;
+                    }
+                }
+            }
+        }
+        /* On peut ensuite calculer le prix total de la commande */
+        $this->setPrixTotal(0); // On réinitialise le prix de la commande à chaque calcul
+        $nb_tarif_famille = 0; // Un seul billet famille par commande
+        foreach ($this->billets as $billet) {
+            if ($billet->getFamille()) {
+                if ($nb_tarif_famille == 0) {
+                    $this->addPrixTotal(self::TARIF_FAMILLE);
+                    $nb_tarif_famille ++;
+                }
+            }
+            elseif ($billet->getReduit()) {
+                $this->addPrixTotal(self::TARIF_REDUIT);
+            }
+            else {
+                switch ($billet->getTarif()) {
+                    case Billet::BILLET_NORM:
+                        $this->addPrixTotal(self::TARIF_NORMAL);
+                        break;
+                    case Billet::BILLET_ENF:
+                        $this->addPrixTotal(self::TARIF_ENF);
+                        break;
+                    case Billet::BILLET_SENIOR:
+                        $this->addPrixTotal(self::TARIF_SENIOR);
+                        break;
+                }
+            }
         }
     }
 
@@ -304,5 +377,31 @@ class Commande
     public function getStatus()
     {
         return $this->status;
+    }
+
+
+
+    /**
+     * Set confirmation
+     *
+     * @param \Louvres\CommandeBundle\Entity\Confirmation $confirmation
+     *
+     * @return Commande
+     */
+    public function setConfirmation(\Louvres\CommandeBundle\Entity\Confirmation $confirmation = null)
+    {
+        $this->confirmation = $confirmation;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmation
+     *
+     * @return \Louvres\CommandeBundle\Entity\Confirmation
+     */
+    public function getConfirmation()
+    {
+        return $this->confirmation;
     }
 }

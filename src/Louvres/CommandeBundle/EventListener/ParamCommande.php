@@ -22,7 +22,6 @@ class ParamCommande {
             ->getRepository('LouvresCommandeBundle:Commande')
             ->getNbBillets($entity->getCommande()->getId());
         $entity->getCommande()->setNbBillet($nbBillets);
-
         $entity->getCommande()->calculPrixTotal();
         $em->flush();
     }

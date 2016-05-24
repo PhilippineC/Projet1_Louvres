@@ -14,6 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Billet
 {
+    CONST BILLET_GRATUIT = 'gratuit';
+    CONST BILLET_ENF = 'enfant';
+    CONST BILLET_NORM = 'normal';
+    CONST BILLET_SENIOR = 'senior';
+    CONST BILLET_FAMILLE = 'famille';
+    CONST BILLET_REDUIT = 'reduit';
+    CONST NOT_FOUND = 'undefini';
+
     /**
      * @ORM\ManyToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande", inversedBy="billets", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
@@ -71,15 +79,21 @@ class Billet
 
     /**
      * @var int
-     * @ORM\Column(name="meme_nom", type="int")
+     * @ORM\Column(name="meme_nom", type="integer")
      */
-    private $memeNom;
+    private $memeNom = 0;
 
     /**
      * @var bool
      * @ORM\Column(name="famille", type="boolean")
      */
-    private $famille;
+    private $famille = false;
+
+    /**
+     * @var string
+     * @ORM\Column(name="tarif_calcule", type="string", nullable=true)
+     */
+    private $tarifCalcule;
 
     public function __construct() {
 
@@ -275,16 +289,77 @@ class Billet
         $date_enfant = $date_enfant->sub(new \DateInterval('P4Y'));
         $date_senior = $date_senior->sub(new \DateInterval('P60Y'));
         if (($this->dateNaissance > $date_enfant) && ($this->dateNaissance <= $today)) {
-            $this->setTarif('gratuit');
+            $this->setTarif(self::BILLET_GRATUIT);
         }
         elseif ($this->dateNaissance <= $date_senior) {
-            $this->setTarif('senior');
+            $this->setTarif(self::BILLET_SENIOR);
         }
         else if ($this->dateNaissance <= $date_normal) {
-            $this->setTarif('normal');
+            $this->setTarif(self::BILLET_NORM);
         }
         else if ($this->dateNaissance <= $date_enfant)  {
-            $this->setTarif('enfant');
+            $this->setTarif(self::BILLET_ENF);
         }
+        else $this->setTarif(self::NOT_FOUND);
+    }
+
+    /**
+     * Inc memeNom
+     *
+     * @param \int $memeNom
+     *
+     * @return Billet
+     */
+    public function incMemeNom()
+    {
+        $this->memeNom ++;
+        return $this;
+    }
+
+    /**
+     * Set memeNom
+     *
+     * @param \int $memeNom
+     *
+     * @return Billet
+     */
+    public function setMemeNom($memeNom)
+    {
+        $this->memeNom = $memeNom;
+        return $this;
+    }
+
+    /**
+     * Get memeNom
+     *
+     * @return \int
+     */
+    public function getMemeNom()
+    {
+        return $this->memeNom;
+    }
+
+    /**
+     * Set famille
+     *
+     * @param boolean $famille
+     *
+     * @return Billet
+     */
+    public function setFamille($famille)
+    {
+        $this->famille = $famille;
+
+        return $this;
+    }
+
+    /**
+     * Get famille
+     *
+     * @return boolean
+     */
+    public function getFamille()
+    {
+        return $this->famille;
     }
 }

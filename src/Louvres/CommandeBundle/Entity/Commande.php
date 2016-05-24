@@ -5,6 +5,7 @@ namespace Louvres\CommandeBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Commande
@@ -33,10 +34,17 @@ class Commande
     private $billets;
 
     /**
-     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Email", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Confirmation", cascade={"persist"})
      */
-    private $email;
+    private $confirmation;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, nullable=true, unique=true)
+     */
+
+    private $code;
     /**
      * @var int
      *
@@ -49,7 +57,7 @@ class Commande
 
     /**
      * @var \DateTime
-     *@Assert\DateTime()
+     * @Assert\DateTime()
      * @ORM\Column(name="date_com", type="datetime")
      */
     private $dateCom;
@@ -273,9 +281,6 @@ class Commande
         return $this->billets;
     }
 
-     /**
-     * @ORM\PostPersist
-     */
     public function calculPrixTotal()
     {
         /* On détermine d'abord l'attribut famille à false ou true en fonction des tarifs de la commande*/
@@ -323,6 +328,7 @@ class Commande
         $nb_tarif_famille = 0; // Un seul billet famille par commande
         foreach ($this->billets as $billet) {
             if ($billet->getFamille()) {
+                $billet->setTarifCalcule(Billet::BILLET_FAMILLE);
                 if ($nb_tarif_famille == 0) {
                     $this->addPrixTotal(self::TARIF_FAMILLE);
                     $nb_tarif_famille ++;
@@ -330,17 +336,21 @@ class Commande
             }
             elseif ($billet->getReduit()) {
                 $this->addPrixTotal(self::TARIF_REDUIT);
+                $billet->setTarifCalcule(Billet::BILLET_REDUIT);
             }
             else {
                 switch ($billet->getTarif()) {
                     case Billet::BILLET_NORM:
                         $this->addPrixTotal(self::TARIF_NORMAL);
+                        $billet->setTarifCalcule(Billet::BILLET_NORM);
                         break;
                     case Billet::BILLET_ENF:
                         $this->addPrixTotal(self::TARIF_ENF);
+                        $billet->setTarifCalcule(Billet::BILLET_ENF);
                         break;
                     case Billet::BILLET_SENIOR:
                         $this->addPrixTotal(self::TARIF_SENIOR);
+                        $billet->setTarifCalcule(Billet::BILLET_SENIOR);
                         break;
                 }
             }
@@ -372,27 +382,70 @@ class Commande
         return $this->status;
     }
 
+
+
     /**
-     * Set email
+     * Set confirmation
      *
-     * @param \Louvres\CommandeBundle\Entity\Email $email
+     * @param \Louvres\CommandeBundle\Entity\Confirmation $confirmation
      *
      * @return Commande
      */
-    public function setEmail(\Louvres\CommandeBundle\Entity\Email $email = null)
+    public function setConfirmation(\Louvres\CommandeBundle\Entity\Confirmation $confirmation = null)
     {
-        $this->email = $email;
+        $this->confirmation = $confirmation;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get confirmation
      *
-     * @return \Louvres\CommandeBundle\Entity\Email
+     * @return \Louvres\CommandeBundle\Entity\Confirmation
      */
-    public function getEmail()
+    public function getConfirmation()
     {
-        return $this->email;
+        return $this->confirmation;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Commande
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function generateCode()
+    {
+        $lettres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $chiffres = '1234567890';
+        $code_lettres = ''; $code_chiffres = ''; $code_aleatoire ='';
+        for($i=0;$i < 4 ;$i++)  //4 LETTRES et 4 CHIFFRES
+        {
+            $code_lettres .= substr($lettres, rand()%(strlen($lettres)),1);
+            $code_chiffres .= substr($chiffres, rand()%(strlen($chiffres)),1);
+        }
+        $code_aleatoire = 'L' . $code_chiffres . $code_lettres;
+        $this->setCode($code_aleatoire);
     }
 }

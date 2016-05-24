@@ -4,8 +4,11 @@ namespace Louvres\CommandeBundle\Controller;
 
 use Louvres\CommandeBundle\Entity\Billet;
 use Louvres\CommandeBundle\Entity\Commande;
+use Louvres\CommandeBundle\Entity\Confirmation;
 use Louvres\CommandeBundle\Form\BilletType;
 use Louvres\CommandeBundle\Form\CommandeType;
+use Louvres\CommandeBundle\Form\ConfirmationType;
+use Louvres\CommandeBundle\MailBillets\BilletsPDF;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +41,9 @@ class CommandeController extends Controller
             $em->persist($commande);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('Louvres_commande_paiement'));
+            return $this->redirect($this->generateUrl('Louvres_commande_confirmation',  array(
+                'code' => $commande->getCode()
+                )));
         }
 
         return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(
@@ -47,9 +52,32 @@ class CommandeController extends Controller
         ));
     }
 
-
-    public function paiementAction()
+    public function confirmationAction(Commande $commande, Request $request)
     {
-        return $this->render('LouvresCommandeBundle:Commande:paiement.html.twig');
+        $confirmation = new Confirmation();
+        $commande->setConfirmation($confirmation);
+        $form = $this->createForm(ConfirmationType::class, $confirmation);
+
+        // On vérifie que les valeurs entrées sont correctes
+        if ($form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($confirmation);
+            $em->flush();
+
+            if ($commande->getConfirmation()->getMoyenPaiement() == 'paypal') {
+                return $this->redirect($this->generateUrl('Louvres_commande_paiement_paypal', array(
+                    'code' => $commande->getCode()
+                )));
+            } elseif ($commande->getConfirmation()->getMoyenPaiement() == 'stripe') {
+                return $this->redirect($this->generateUrl('Louvres_commande_paiement_stripe', array(
+                    'code' => $commande->getCode()
+                )));
+            }
+        }
+
+        return $this->render('LouvresCommandeBundle:Commande:confirmation.html.twig', array(
+            'form' =>$form->createView(),
+            'commande' =>$commande
+        ));
     }
 }

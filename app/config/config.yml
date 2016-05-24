@@ -74,28 +74,37 @@ assetic:
     filters:
         cssrewrite: ~
 
-#payum:
-#    storages:
-#        Louvres\CommandeBundle\Entity\Payment: { doctrine: orm }
- #       Louvres\CommandeBundle\Entity\PaymentDetails: { doctrine: orm }
+payum:
+    security:
+        token_storage:
+            Louvres\CommandeBundle\Entity\PaymentToken: { doctrine: orm }
+    storages:
+        Louvres\CommandeBundle\Entity\Payment: { doctrine: orm }
+        Louvres\CommandeBundle\Entity\PaymentDetails: { doctrine: orm }
 
-#    security:
-#        token_storage:
-#            Louvres\CommandeBundle\Entity\PaymentToken: { doctrine: orm }
+    gateways:
+        billets_paypal :
+            factory: paypal_express_checkout
+            username:  'philippine.chombart-facilitator_api1.gmail.com'
+            password:  'SZPMQW4YKSKG8ZFE'
+            signature: 'AdvVrWUW13YUjL9AW3PSyaDdhL6zAX-1uVeWGvpDdp3z--6Yi8TpwYEy'
+            sandbox: true
 
+        billets_stripe:
+            factory: stripe_checkout
+            publishable_key: 'pk_test_fLGAka6DVwEmTSiRPAQzDCbA'
+            secret_key:      'sk_test_aIBk6ZsRhc7XYV5qlowNYzSh'
+            payum.template.obtain_token: 'LouvresCommandeBundle:Commande:payumStripe.html.twig'
 
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     "\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\""
+        options:    []
+    image:
+        enabled:    true
+        binary:     "\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\""
+        options:    []
 
-#    gateways:
-#        tickets_by_paypal:
-#            factory: paypal_express_checkout
- #           username:  '%payum.paypal.username%'
-  #          password:  '%payum.paypal.password%'
-   #         signature: '%payum.paypal.signature%'
-    #        sandbox: '%payum.paypal.sandbox%'
-
-
-#        tickets_by_stripe:
- #           factory: stripe_checkout
-  #          publishable_key: '%payum.stripe.publishable_key%'
-   #         secret_key:      '%payum.stripe.secret_key%'
-    #        payum.template.obtain_token: 'LOUVREAppBundle:App:obtain_checkout_token.html.twig'
+knp_snappy:
+    temporary_folder: %kernel.cache_dir%/snappy

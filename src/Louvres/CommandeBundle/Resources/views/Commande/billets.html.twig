@@ -1,0 +1,30 @@
+{% extends "LouvresCommandeBundle::layout.html.twig" %}
+
+
+{% block nav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <!-- encart gris : Confirmation -->
+    <div class="encart_gris">
+        <div class="container-fluid">
+            <p>Votre commande</p>
+        </div>
+    </div>
+
+    <!-- Récapitulatif  -->
+    <div>
+            {% for billet in  commande.billets %}
+                <div id="detail_commande">
+                    {% image '@LouvresCommandeBundle/Resources/public/images/logo_louvre.png' %}
+                    <img src="{{ asset_url }}" alt="Logo du Louvres" />
+                    {% endimage %}
+                    <p>Réservation n°{{ commande.code }} </p>
+                    <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }} pour la {{ commande.typeBillet}}</p>
+                    <p>{{ billet.nom }} {{ billet.prenom }} : billet tarif {{ billet.tarifCalcule }} </p>
+                    <!-- generer le QRcode -->
+                </div>
+            {% endfor %}
+    </div>
+{% endblock %}

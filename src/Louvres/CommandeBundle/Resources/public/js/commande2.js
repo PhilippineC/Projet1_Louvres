@@ -40,7 +40,7 @@ function DisableSpecificDates(date) {
             return [false];
         }
     }
-    if (day == 2) {
+    if ((day == 2) || (day == 0)) {
         return [false] ;
     } else {
         return [true] ;
@@ -401,9 +401,8 @@ $(function() {
         if ($(':radio[class^="Demi"]:checked').val()) {
             $('#type_billet').text(' à partir de 14h');
         }
-
-        $('#detail_commande').hide();
-        $('#details_billets p').remove();
+        verif_formulaire();
+        FormulaireRempli($('.billets input'));
     });
 });
 

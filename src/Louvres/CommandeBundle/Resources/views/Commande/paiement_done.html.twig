@@ -1,0 +1,36 @@
+{% extends "LouvresCommandeBundle::layout.html.twig" %}
+
+{% block title %}
+    Commande validée
+{% endblock %}
+
+{% block nav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <!-- encart gris : Confirmation -->
+    <div class="encart_gris">
+        <div class="container-fluid">
+            <p>Commande validée</p>
+        </div>
+    </div>
+
+    <!-- Récapitulatif  -->
+    <div id="prix_total">
+        <div id="detail_commande">
+            <p>Votre commande a été validée et vos billets vous ont été envoyés par mail.</p>
+            <p class="aide">Vous pouvez <a href="mailto:billetsLouvre@louvres.fr">nous contacter</a> en cas de probléme lié à la commande.</p>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}
+

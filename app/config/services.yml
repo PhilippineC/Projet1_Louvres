@@ -3,8 +3,3 @@
 parameters:
 #    parameter_name: value
 
-services:
-    cmd.listener:
-        class: Louvres\CommandeBundle\EventListener\ParamCommande
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }

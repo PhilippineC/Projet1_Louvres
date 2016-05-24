@@ -15,10 +15,6 @@ class LoadBillet implements FixtureInterface
         $commande = new Commande();
         $commande->setDateVisite(new \DateTime('2016-07-11'));
         $commande->setTypeBillet('journee');
-        $mail = new Email();
-        $mail->setMail('blabla@blabla.com');
-        $commande->setEmail($mail);
-        $manager->persist($mail);
         $manager->persist($commande);
 
         // On crée 4 billets qu'on va lier à cette commande
@@ -64,10 +60,6 @@ class LoadBillet implements FixtureInterface
         $commande2 = new Commande();
         $commande2->setDateVisite(new \DateTime('2016-07-03'));
         $commande2->setTypeBillet('journee');
-        $mail2 = new Email();
-        $mail2->setMail('blabla2@blabla.com');
-        $commande2->setEmail($mail2);
-        $manager->persist($mail2);
         $manager->persist($commande2);
 
         // On crée 4 billets qu'on va lier à cette commande

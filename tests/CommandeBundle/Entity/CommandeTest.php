@@ -45,44 +45,44 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->billet5->CalculTarif();
     }
 
-    public function testCalculTarifFamilleVerifMemeNomAvecQuatresBillets()
+    public function testVerifMemeNomAvecQuatresBillets()
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
-        $this->commande->calculTarifFamille();
+        $this->commande->calculPrixTotal();
         $this->assertEquals(4, $this->billet1->getMemeNom());
     }
 
-    public function testCalculTarifFamilleVerifMemeNomAvecCinqBillets()
+    public function testVerifMemeNomAvecCinqBillets()
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
         $this->commande->addBillet($this->billet5);
-        $this->commande->calculTarifFamille();
+        $this->commande->calculPrixTotal();
         $this->assertEquals(4, $this->billet2->getMemeNom());
     }
 
-    public function testCalculTarifFamilleTrue()
+    public function testTarifFamilleTrue()
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
-        $this->commande->calculTarifFamille();
+        $this->commande->calculPrixTotal();
         $this->assertTrue($this->billet3->getFamille());
     }
 
-    public function testCalculTarifFamilleFalse()
+    public function testTarifFamilleFalse()
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet5);
-        $this->commande->calculTarifFamille();
+        $this->commande->calculPrixTotal();
         $this->assertFalse($this->billet3->getFamille());
     }
 
@@ -90,7 +90,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
     {
         $this->billet1->setReduit(true);
         $this->commande->addBillet($this->billet1);
-        $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
          $this->assertEquals(Commande::TARIF_REDUIT, $this->commande->getPrixTotal());
 
@@ -101,7 +100,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->billet1->setReduit(true);
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
-        $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
         $this->assertEquals(Commande::TARIF_REDUIT + Commande::TARIF_NORMAL, $this->commande->getPrixTotal());
 
@@ -111,7 +109,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
     {
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet5);
-        $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
         $this->assertEquals(Commande::TARIF_SENIOR + Commande::TARIF_ENF, $this->commande->getPrixTotal());
 
@@ -123,7 +120,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
-        $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
         $this->assertEquals(Commande::TARIF_FAMILLE, $this->commande->getPrixTotal());
 
@@ -136,7 +132,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
-         $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
         $this->assertEquals(Commande::TARIF_FAMILLE, $this->commande->getPrixTotal());
 
@@ -149,7 +144,6 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
         $this->commande->addBillet($this->billet5);
-        $this->commande->calculTarifFamille();
         $this->commande->calculPrixTotal();
         $this->assertEquals(Commande::TARIF_FAMILLE + Commande::TARIF_SENIOR, $this->commande->getPrixTotal());
     }

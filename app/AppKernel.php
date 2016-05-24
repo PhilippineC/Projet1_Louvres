@@ -17,6 +17,9 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Louvres\CommandeBundle\LouvresCommandeBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Payum\Bundle\PayumBundle\PayumBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -53,7 +53,6 @@ class CommandeType extends AbstractType
             ))
             ->add('valider', SubmitType::class, array(
                 'attr' => array('class' => 'valider')))
-         /*   ->add('mail')*/
         ;
     }
     

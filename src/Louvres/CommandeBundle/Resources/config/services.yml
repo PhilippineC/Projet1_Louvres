@@ -2,3 +2,12 @@ services:
 #    louvres_commande.example:
 #        class: Louvres\CommandeBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+
+services:
+    cmd.listener:
+        class: Louvres\CommandeBundle\EventListener\ParamCommande
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    louvres_billets_pdf :
+            class: Louvres\CommandeBundle\MailBillets\BilletsPDF

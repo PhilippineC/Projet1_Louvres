@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Email
+ * Confirmation
  *
- * @ORM\Table(name="email")
- * @ORM\Entity(repositoryClass="Louvres\CommandeBundle\Repository\EmailRepository")
+ * @ORM\Table(name="Confirmation")
+ * @ORM\Entity(repositoryClass="Louvres\CommandeBundle\Repository\ConfirmationRepository")
  */
-class Email
+class Confirmation
 {
     /**
      * @var int
@@ -24,10 +24,19 @@ class Email
 
     /**
      * @var string
-     *@Assert\Email()
+     * @Assert\Email(
+     *     message = "Merci de saisir une adresse email valide",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="mail", type="string", length=255)
      */
     private $mail;
+
+    /**
+     * @var string
+     * @ORM\Column(name="moyenPaiement", type="string", length=255)
+     */
+    private $moyenPaiement;
 
 
     /**
@@ -45,7 +54,7 @@ class Email
      *
      * @param string $mail
      *
-     * @return Email
+     * @return Confirmation
      */
     public function setMail($mail)
     {
@@ -62,5 +71,29 @@ class Email
     public function getMail()
     {
         return $this->mail;
+    }
+
+    /**
+     * Set moyenPaiement
+     *
+     * @param string $moyenPaiement
+     *
+     * @return Confirmation
+     */
+    public function setMoyenPaiement($moyenPaiement)
+    {
+        $this->moyenPaiement = $moyenPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get moyenPaiement
+     *
+     * @return string
+     */
+    public function getMoyenPaiement()
+    {
+        return $this->moyenPaiement;
     }
 }
