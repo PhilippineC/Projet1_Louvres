@@ -20,6 +20,7 @@ class PaymentController extends Controller
         $details['PAYMENTREQUEST_0_CURRENCYCODE'] = 'EUR';
         $details['PAYMENTREQUEST_0_AMT'] = $commande->getPrixTotal();
         $storage->update($details);
+        $details->setCommande($commande);
 
         $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
             $gatewayName,
@@ -40,6 +41,7 @@ class PaymentController extends Controller
         $payment->setCurrencyCode('EUR');
         $payment->setTotalAmount($commande->getPrixTotal()*100); //
         $payment->setClientId($commande->getId());
+        $payment->setCommande($commande);
         $payment->setClientEmail($commande->getConfirmation()->getMail());
 
         $storage->update($payment);
@@ -47,7 +49,10 @@ class PaymentController extends Controller
         $em->persist($payment);
         $em->flush($payment);
 
-        $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken($gatewayName, $payment, 'Louvres_commande_paiement_done');
+        $captureToken = $this->get('payum')->getTokenFactory()->createCaptureToken(
+            $gatewayName,
+            $payment,
+            'Louvres_commande_paiement_done');
 
         return $this->redirect($captureToken->getTargetUrl());
     }
@@ -71,21 +76,22 @@ class PaymentController extends Controller
         // or Payum can fetch the model for you while executing a request (Preferred).
         $gateway->execute($status = new GetHumanStatus($token));
         $details = $status->getFirstModel();
-
+        $em = $this->getDoctrine()->getManager();
+        $commande = $em->getRepository('LouvresCommandeBundle:Commande')->find($details->getCommande());
         if ($status->isCaptured()) {
             // Création du pdf + envoi par mail
+            $this->get('louvres_billets_pdf')->sendMail($commande);
+            // MAJ du status de la commande
+            $commande->setStatus('paye');
             return $this->render('LouvresCommandeBundle:Commande:paiement_done.html.twig');
         }
         else {
-            $this->get('session')->getFlashBag()->add('info', 'Le paiement n\'a pas abouti. Veuillez réessayer.' );
+            $em->remove($details);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('info', 'ATTENTION : Le paiement n\'a pas abouti. Veuillez réessayer.' );
             return $this->redirectToRoute('Louvres_commande_confirmation', array(
                 'code' => $commande->getCode()
             ));
         }
-
-    /*    return new JsonResponse(array(
-            'status' => $status->getValue(),
-            'details' => iterator_to_array($details),
-        ));*/
     }
 }

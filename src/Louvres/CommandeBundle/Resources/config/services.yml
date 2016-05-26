@@ -10,4 +10,5 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
 
     louvres_billets_pdf :
-            class: Louvres\CommandeBundle\MailBillets\BilletsPDF
+        class: Louvres\CommandeBundle\MailBillets\MailBilletsPDF
+        arguments: ["@mailer", "@knp_snappy.pdf", "@templating"]

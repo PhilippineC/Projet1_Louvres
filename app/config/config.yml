@@ -108,3 +108,28 @@ knp_snappy:
 
 knp_snappy:
     temporary_folder: %kernel.cache_dir%/snappy
+
+nomaya_social :
+    buttons:
+        facebook:
+            url:        null
+            locale:     "fr_FR"
+            send:       false
+            width:      300
+            showFaces:  false
+            layout:     "button_count"
+        twitter:
+            url:        null
+            locale:     "fr"
+            message:    "Je veux partager cela avec vous"
+            text:       "Tweet"
+            via:        "Le musée du Louvres"
+            tag:        "Venez avec moi !"
+
+endroid_qr_code:
+    size: 60
+    padding: 10
+    extension: gif
+    error_correction_level: high
+    foreground_color: { r: 0, g: 0, b: 0, a: 0 }
+    background_color: { r: 255, g: 255, b: 255, a: 0 }

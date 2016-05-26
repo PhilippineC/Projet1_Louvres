@@ -178,6 +178,9 @@ label {
     margin-bottom: 0px;
 }
 
+.social_buttons {
+    color : #4e4e4e;
+}
 fieldset {
     border: 2px solid #4e4e4e;
     paddin-top: 10px;

@@ -18,4 +18,43 @@ class Payment extends BasePayment
      * @var integer $id
      */
     protected $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Louvres\CommandeBundle\Entity\Commande", cascade={"persist"})
+     */
+    protected $commande;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set commande
+     *
+     * @param \Louvres\CommandeBundle\Entity\Commande $commande
+     *
+     * @return Payment
+     */
+    public function setCommande(\Louvres\CommandeBundle\Entity\Commande $commande = null)
+    {
+        $this->commande = $commande;
+
+        return $this;
+    }
+
+    /**
+     * Get commande
+     *
+     * @return \Louvres\CommandeBundle\Entity\Commande
+     */
+    public function getCommande()
+    {
+        return $this->commande;
+    }
 }
