@@ -77,13 +77,13 @@
         <div class="paiement">
             <div class="container row">
                 <div id="form_type_billet">
-                     {% for child in form.moyenPaiement %}
+                    {% for child in form.moyenPaiement %}
                         <div class="radio">
                             {{ form_widget(child, {'attr': {'class': child.vars.label}}) }}
                             {{ child.vars.label }}
                         </div>
                     {% endfor %}
-                {{ form_errors(form.moyenPaiement) }}
+                    {{ form_errors(form.moyenPaiement) }}
                 </div>
             </div>
         </div>

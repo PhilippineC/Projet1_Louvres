@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="col-xs-7">
                             <img src="{{ app.request.getSchemeAndHttpHost() ~ asset('bundles/louvrescommande/images/logo_louvre.png') }}" alt="Logo du Louvres" />
-                            <p><strong>Réservation n°{{ commande.code }} <strong></p>
+                            <p><strong>{{ commande.code }} <strong></p>
                         </div>
                         <div class="col-xs-4">
                             <img src="{{ qrcode_data_uri(commande.code) }}" />

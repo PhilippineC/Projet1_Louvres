@@ -7,11 +7,13 @@
         <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="{{ publishable_key }}"
+                data-image="{{asset('bundles/louvrescommande/images/logo_louvre.png')}}"
                 data-image="{{ model.image|default("") }}"
                 data-name="{{ model.name|default("") }}"
-                {#    data-description="{{ model.description|default("") }}"#}
+                data-description="Louvres - Billetterie"
+                data-locale="auto"
                 data-amount="{{ model.amount }}"
-                data-currency="{{ model.currency|default("USD") }}">
+                data-currency="{{ model.currency|default("EUR") }}">
         </script>
     </form>
 {% endblock %}

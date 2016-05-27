@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 /**
  * Commande
@@ -39,9 +41,9 @@ class Commande
     private $confirmation;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=255, nullable=true, unique=true)
+     * @ORM\Column(type="guid")
+     * @Assert\Uuid
+     * @ORM\GeneratedValue(strategy="UUID")
      */
 
     private $code;
@@ -418,7 +420,6 @@ class Commande
     public function setCode($code)
     {
         $this->code = $code;
-
         return $this;
     }
 
@@ -437,6 +438,18 @@ class Commande
      */
     public function generateCode()
     {
+        try {
+            $this->setCode(Uuid::uuid1());
+        } catch (UnsatisfiedDependencyException $e) {
+            echo 'Caught exception: ' . $e->getMessage() . "\n";
+        }
+    }
+
+    /*    /**
+         * @ORM\PostPersist
+         */
+/*    public function generateCode()
+    {
         $lettres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $chiffres = '1234567890';
         $code_lettres = ''; $code_chiffres = ''; $code_aleatoire ='';
@@ -447,5 +460,5 @@ class Commande
         }
         $code_aleatoire = 'L' . $code_chiffres . $code_lettres;
         $this->setCode($code_aleatoire);
-    }
+    }*/
 }
