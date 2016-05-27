@@ -26,13 +26,18 @@
     <!-- Récapitulatif  -->
     <div id="prix_total">
         <div id="detail_commande">
-            <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }} pour la {{ commande.typeBillet}}</p>
-            <p>Nombre de billet(s) : {{ commande.nbBillet }}</p>
-            <p> Détail des billet(s) : </p>
-            <div id="details_billets">
-                {% for billet in commande.billets %}
-                    <p>{{ billet.nom }} {{ billet.prenom }} : tarif {{ billet.tarifCalcule }} </p>
-                {% endfor %}
+            <div class="code">
+                <p><strong>Réservation n° : {{ commande.code }}</strong></p>
+            </div>
+            <div class="reste_commande">
+                <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }} pour la {{ commande.typeBillet}}</p>
+                <p>Nombre de billet(s) : {{ commande.nbBillet }}</p>
+                <p> Détail des billet(s) : </p>
+                <div id="details_billets">
+                    {% for billet in commande.billets %}
+                        <p>{{ billet.nom }} {{ billet.prenom }} : tarif {{ billet.tarifCalcule }} </p>
+                    {% endfor %}
+                </div>
             </div>
             <p id ="total_commande"><strong>Total de la commande : {{ commande.prixTotal }} €</strong></p>
         </div>
@@ -53,8 +58,9 @@
         <div class="email">
             <div class="container row">
                 <p>Vos billets vous seront envoyés par email.</p>
-                <div class="form-group input_form col-xs-12 col-sm-5">
+                <div class="form-group input_form col-xs-12 col-sm-4">
                     {{ form_widget(form.mail, {'attr': {'class': 'form-control input-sm'}}) }}
+                    {{ form_errors(form.mail) }}
                     <span class="error">{{ form_errors(form.mail) }} </span>
                 </div>
              </div>
@@ -85,9 +91,16 @@
         <!-- encart gris : Valider -->
         <div class="encart_gris">
             <div class="container-fluid">
-                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-default btn-sm col-sm-offset-4', 'id' : 'btn-valider'}}) }}
+                <p>3. Valider et accèdez au paiement</p>
             </div>
         </div>
+
+        <div class="paiement">
+            <div class="container row">
+                {{ form_widget(form.valider, {'attr': {'class': 'btn btn-default btn-sm col-xs-offset-2 col-sm-offset-4 col-md-offset-3', 'id' : 'btn-valider'}}) }}
+            </div>
+        </div>
+
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>

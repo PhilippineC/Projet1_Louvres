@@ -41,6 +41,7 @@
 
                 <div class="dateVisite col-xs-10 col-sm-4 col-md-3 col-lg-3">
                     {{ form_widget(formCommande.dateVisite, {'attr': {'id': 'datepicker', 'class': 'col-sm-6 col-md-5 col-lg-4 form-control input-sm'}}) }}
+                    {{ form_errors(formCommande.dateVisite) }}
                 </div>
             </div>
         </div>
@@ -67,6 +68,7 @@
                             {{ child.vars.label }}
                         </div>
                     {% endfor %}
+                    {{ form_errors(formCommande.typeBillet) }}
                 </div>
             </div>
         </div>
@@ -87,7 +89,6 @@
                     {% filter escape %}
                         {{ include('LouvresCommandeBundle:Commande:prototype.html.twig', { 'form': formCommande.billets.vars.prototype }) }}
                     {% endfilter %}">
-
                     </div>
                 </div>
             </div>
@@ -103,18 +104,27 @@
 
         <!-- Jour de visite + nombre de billets de chaque catégorie + prix total-->
         <div id="prix_total">
-            <p id="verif">Veuillez saisir tous les champs pour valider la commande</p>
             <div id="detail_commande">
                 <p>Jour de la visite : <span id="jour_visite"></span><span id="type_billet"></span></p>
                 <p> Tarif des billet(s) : </p>
                 <div id="details_billets"></div>
                 <p id ="total_commande"><strong>Total de la commande : <span id="prix">0 €</span></strong></p>
             </div>
-            {{ form_widget(formCommande.valider, {'attr': {'class': 'btn btn-default btn-sm col-sm-offset-4', 'id' : 'btn-valider'}}) }}
         </div>
-        <!--   <button id="btn-reset" type="submit" class="btn btn-warning btn-sm col-sm-offset-4 col-xs-offset-1">Reset</button> -->
 
-        <!--    <button id="btn-valider" type="submit" class="btn btn-default btn-sm col-sm-offset-4 col-xs-offset-1">Valider la commande</button> -->
+        <!-- encart gris : Valider -->
+        <div class="encart_gris">
+            <div class="container-fluid">
+                <p>5. Valider la commande</p>
+            </div>
+        </div>
+
+        <div class="paiement">
+            <div class="container row">
+                <p id="verif">Veuillez saisir tous les champs pour valider la commande</p>
+                {{ form_widget(formCommande.valider, {'attr': {'class': 'btn btn-default btn-sm col-xs-offset-2 col-sm-offset-4 col-md-offset-3', 'id' : 'btn-valider'}}) }}
+            </div>
+        </div>
         {{ form_rest(formCommande) }}
         {{ form_end(formCommande) }}
     </div>

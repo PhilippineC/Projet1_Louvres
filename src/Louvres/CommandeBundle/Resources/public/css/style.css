@@ -58,7 +58,7 @@ h1 {
 }
 
 .header_texte {
-    padding : 20px 20px 10px 20px;
+    padding : 10px 15px 0px;
 }
 
 .header_texte p {
@@ -77,7 +77,7 @@ h1 {
     padding-top: 5px;
 }
 
-.date_picker, .type_billet , #nbr_billet, #prix_total, #info_visiteur, .email, .paiement, .com_valide, .paiement_stripe {
+.date_picker, .type_billet , #nbr_billet, #prix_total, #info_visiteur, .email, .paiement, .com_valide, .paiement_stripe, .valider {
     background-color: white;
     padding-bottom : 5px;
 }
@@ -179,7 +179,9 @@ label {
 }
 
 .social_buttons {
-    color : #4e4e4e;
+    background-color : white;
+    height: 60px;
+    text-align: center;
 }
 fieldset {
     border: 2px solid #4e4e4e;
@@ -214,9 +216,22 @@ hr {
 }
 
 .btn-sm, .btn-group-sm > .btn {
-    width:  175px;
+    width:  200px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
+.email .col-xs-12 {
+    padding-left : 0px;
+}
+
+.email p {
+    margin-bottom : 5px;
+}
+
+#prix_total p {
+    margin-bottom : 3px;
+}
 
 .error, .max7billets {
     color : red;
@@ -266,8 +281,9 @@ ul {
 
 #verif {
     color : #c62d02;
-    padding-left: 22px;
+    padding-left: 30px;
     font-weight: 700;
+    margin-top: 10px;
 }
 
 .aide {
@@ -282,18 +298,32 @@ ul {
     background-color: rgb(245, 245, 245);
     padding-left: 12px;
     padding-top: 5px;
-    margin-bottom : 20px;
+    margin-bottom : 10px;
 }
 
 #details_billets {
     padding-left: 10px;
     color: #c72d01;
-    margin-top: -10px;
 }
 
 #details_billets p {
-    margin-bottom : 1px;
     font-size : 0.9em;
+}
+
+.code {
+    background-color: #4e4e4e;
+    color : white;
+    margin-top: -5px;
+    margin-left: -12px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 12px;
+}
+
+.reste_commande {
+    margin-top : 5px;
 }
 
 #prix_total {
@@ -392,9 +422,6 @@ ul {
     }
     .sous_titre_tarif {
         font-size : 0.6em;
-    }
-    .btn-sm {
-        width: 297px;
     }
     .form-horizontal .form-group {
         padding-right: 25px;

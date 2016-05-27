@@ -64,6 +64,7 @@ class CommandeController extends Controller
             $em->persist($confirmation);
             $em->flush();
 
+
             if ($commande->getConfirmation()->getMoyenPaiement() == 'paypal') {
                 return $this->redirect($this->generateUrl('Louvres_commande_paiement_paypal', array(
                     'code' => $commande->getCode()

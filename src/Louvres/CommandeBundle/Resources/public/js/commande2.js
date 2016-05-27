@@ -173,7 +173,7 @@ function verif_formulaire() {
                         $(this).next().show();
                         $(this).next().next().show();
                         $('#verif').show();
-                        $('#detail_commande').hide();
+                        $('#prix_total').hide();
                     }
                 }
             }
@@ -280,7 +280,7 @@ function FormulaireRempli(inputs) {
 
         $('#verif').hide();
         $('#commande_valider').show();
-        $('#detail_commande').show();
+        $('#prix_total').show();
         $('#details_billets p').remove();
 
         //On affiche le prix total de la commande
@@ -289,7 +289,7 @@ function FormulaireRempli(inputs) {
     }
     else {
         $('#verif').show();
-        $('#detail_commande').hide();
+        $('#prix_total').hide();
         $('#commande_valider').hide();
         $('#details_billets p').remove();
         return false;
@@ -391,7 +391,8 @@ $(function() {
     $('#form_type_billet').hide();
     $('#commande_valider').hide();
     $('#info_visiteur').hide();
-    $('#detail_commande').hide();
+    $('#prix_total').hide();
+    $('div label').hide(); //Manière pas très propre de cacher le label Billets
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {

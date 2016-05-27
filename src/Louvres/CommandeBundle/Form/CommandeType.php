@@ -35,17 +35,8 @@ class CommandeType extends AbstractType
                     'Demi-journée (à partir de 14h)' => 'demi-journee'),
                 'multiple' => false,
                 'expanded' => true))
-        /*    ->add('nbBillet', ChoiceType::class, array(
-                'choices' => array(
-                    '1' => 1,
-                    '2' => 2,
-                    '3' => 3,
-                    '4' => 4,
-                    '5' => 5,
-                    '6' => 6,
-                    '7' => 7,
-                    )))*/
             ->add('billets', CollectionType::class, array(
+                'required' => false,
                 'entry_type'    => BilletType::class,
                 'allow_add' => true,
                 'allow_delete' => true,

@@ -51,7 +51,8 @@ class MailBilletsPDF  {
                  $this->template->render(
                      'LouvresCommandeBundle:Commande:email.txt.twig',
                      array('commande' => $commande)
-                 )
+                 ),
+                'text/html'
             )
             ->attach(Swift_Attachment::fromPath(self::PATH_PDF.$this->commande->getCode() .'.pdf'));
         $this->mailer->send($this->message);

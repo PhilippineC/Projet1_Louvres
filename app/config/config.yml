@@ -112,19 +112,19 @@ knp_snappy:
 nomaya_social :
     buttons:
         facebook:
-            url:        null
+            url:        "http://www.louvres-billetterie.com"
             locale:     "fr_FR"
             send:       false
             width:      300
             showFaces:  false
             layout:     "button_count"
         twitter:
-            url:        null
+            url:        "http://www.louvres-billetterie.com"
             locale:     "fr"
             message:    "Je veux partager cela avec vous"
             text:       "Tweet"
-            via:        "Le musée du Louvres"
-            tag:        "Venez avec moi !"
+            via:        "Musée du Louvres"
+            tag:        "Louvres"
 
 endroid_qr_code:
     size: 60
