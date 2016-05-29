@@ -1,0 +1,29 @@
+sudo : false
+
+language: php
+
+cache:
+    directories:
+        $HOME/.composer/cache/files
+
+php:
+    - "5.6"
+    - "7.0"
+    - "nightly"
+    - "hhvm"
+
+matrix:
+    allow_failures:
+        -php: nightly
+        -php: hhvm
+
+env:
+    global:
+        - MIN_PHP=5.6.21
+
+before_install:
+    -composer seulf-update --stable --no-intercation
+    -composer install --no--interaction
+
+script:
+    - ./bin/phpunit tests
