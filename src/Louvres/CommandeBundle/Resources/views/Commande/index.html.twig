@@ -24,6 +24,12 @@
         </div>
     </div>
 
+    <div class="container-fluid">
+        {% for message in app.session.flashbag.get('info') %}
+            <div class="alert alert-warning text-center">{{ message }}</div>
+        {% endfor %}
+    </div>
+
     <div>
         {{ form_start(formCommande, {'action': path('Louvres_commande_home')}) }}
         {{ form_errors(formCommande) }}

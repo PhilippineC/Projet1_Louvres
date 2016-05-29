@@ -148,5 +148,14 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Commande::TARIF_FAMILLE + Commande::TARIF_SENIOR, $this->commande->getPrixTotal());
     }
 
+/*    public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
+    {
+        $this->commande->addBillet($this->billet1);
+        $this->commande->setTypeBillet('demi-journee');
+        $time = new \DateTime();
+        $this->commande->setDateVisite($time);
+//Attention il faut forcer l'heure du jour à 14h
+    }*/
+
 
 }

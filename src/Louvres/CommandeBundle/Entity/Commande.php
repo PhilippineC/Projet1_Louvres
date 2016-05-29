@@ -5,9 +5,10 @@ namespace Louvres\CommandeBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Commande
@@ -103,6 +104,7 @@ class Commande
         $this->dateCom = new \Datetime();
         $this->setStatus('en_cours');
         $this->billets = new ArrayCollection();
+        $this->generateCode();
     }
 
     /**
@@ -445,20 +447,21 @@ class Commande
         }
     }
 
-    /*    /**
-         * @ORM\PostPersist
-         */
-/*    public function generateCode()
+    /**
+     * @Assert\Callback
+     */
+    public function isTypeBilletValide(ExecutionContextInterface $context)
     {
-        $lettres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $chiffres = '1234567890';
-        $code_lettres = ''; $code_chiffres = ''; $code_aleatoire ='';
-        for($i=0;$i < 4 ;$i++)  //4 LETTRES et 4 CHIFFRES
-        {
-            $code_lettres .= substr($lettres, rand()%(strlen($lettres)),1);
-            $code_chiffres .= substr($chiffres, rand()%(strlen($chiffres)),1);
+        // On vérifie que le billet est bien de type demi-journee pour une dateVisite à aujourd'hui après 14h
+        $now = (new \DateTime)->format('Y-m-d H:i:s');
+        list($date, $time) = explode(' ', $now);
+        $hour = explode(':', $time)[0];
+        if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'demi-journee')) {
+            $context
+                ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui. Veuillez sélectionner un billet demi-journée.') // message
+                ->atPath('typeBillet')  // attribut de l'objet qui est violé
+                ->addViolation() // ceci déclenche l'erreur
+            ;
         }
-        $code_aleatoire = 'L' . $code_chiffres . $code_lettres;
-        $this->setCode($code_aleatoire);
-    }*/
+    }
 }

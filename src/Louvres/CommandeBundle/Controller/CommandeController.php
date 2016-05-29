@@ -12,6 +12,7 @@ use Louvres\CommandeBundle\MailBillets\BilletsPDF;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CommandeController extends Controller
 {
@@ -21,17 +22,16 @@ class CommandeController extends Controller
     public function homeAction(Request $request)
     {
     /*  Aller chercher les dates où le musée est complet   */
+        $datesComplet_JSON = [];
         $datesComplet = $this
             ->getDoctrine()
             ->getManager()
             ->getRepository('LouvresCommandeBundle:Commande')
             ->getDatesComplet();
         for ($i = 0; $i<count($datesComplet) ;$i++ ) {
-            $datesComplet[$i] = $datesComplet[$i]['dateVisite']->format('m-d-Y');
+            $datesComplet_JSON[$i] = $datesComplet[$i]['dateVisite']->format('m-d-Y');
         }
-        $datesComplet_JSON = json_encode($datesComplet);
-
-
+        $datesComplet_JSON = json_encode($datesComplet_JSON);
          $commande = new Commande();
          $formCommande = $this->createForm(CommandeType::class, $commande);
 
@@ -39,11 +39,23 @@ class CommandeController extends Controller
         if ($formCommande->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
+        /*    $commande->setDateVisite(new \DateTime("2016-07-11"));*/
+            /* On vérifie que la date de visite selectionnée ne soit pas dans les dates COMPLET*/
+            for ($i = 0; $i<count($datesComplet) ;$i++ ) {
+                if ($commande->getDateVisite() == $datesComplet[$i]['dateVisite']) {
+                    $this->get('session')->getFlashBag()->add('info', 'Toutes les places ont été vendues pour la date selectionnée. Veuillez choisir une autre date.' );
+                    $new_commande = new Commande(); // Création d'un nouveau formulaire pour ne pas avoir les champs préremplis dans le data-prototype à la fin de la page
+                    $formCommande = $this->createForm(CommandeType::class, $new_commande);
+                    return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(
+                        'formCommande' =>$formCommande->createView(),
+                        'Dates_complet' => $datesComplet_JSON
+                    ));
+                }
+            }
             $em->flush();
-
             return $this->redirect($this->generateUrl('Louvres_commande_confirmation',  array(
-                'code' => $commande->getCode()
-                )));
+                    'code' => $commande->getCode()
+            )));
         }
 
         return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(

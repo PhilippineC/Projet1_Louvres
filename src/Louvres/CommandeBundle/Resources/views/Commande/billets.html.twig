@@ -25,11 +25,11 @@
             {% for billet in  commande.billets %}
                 <div id="detail_commande" style="background-color: white">
                     <div class="row">
-                        <div class="col-xs-7">
+                        <div class="col-xs-9">
                             <img src="{{ app.request.getSchemeAndHttpHost() ~ asset('bundles/louvrescommande/images/logo_louvre.png') }}" alt="Logo du Louvres" />
-                            <p><strong>{{ commande.code }} <strong></p>
+                            <p>Réservation n°{{ commande.code }}</p>
                         </div>
-                        <div class="col-xs-4">
+                        <div class="col-xs-3">
                             <img src="{{ qrcode_data_uri(commande.code) }}" />
                         </div>
                     </div>
