@@ -22,8 +22,8 @@ env:
         - MIN_PHP=5.6.21
 
 before_install:
-    -composer seulf-update --stable --no-intercation
-    -composer install --no--interaction
+    -../composer.phar self-update --stable --no-intercation
+    -../composer.phar install --no--interaction
 
 script:
     - ./bin/phpunit tests
