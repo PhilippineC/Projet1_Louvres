@@ -22,7 +22,7 @@ env:
         - MIN_PHP=5.6.21
 
 before_install:
-    -../composer.phar self-update --stable --no-intercation
+    -../composer.phar self-update --stable --no-interaction
     -../composer.phar install --no--interaction
 
 script:
