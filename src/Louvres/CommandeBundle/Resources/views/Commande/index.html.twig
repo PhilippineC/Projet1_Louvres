@@ -96,6 +96,7 @@
                         {{ include('LouvresCommandeBundle:Commande:prototype.html.twig', { 'form': formCommande.billets.vars.prototype }) }}
                     {% endfilter %}">
                     </div>
+                    {% do formCommande.billets.setRendered() %}
                 </div>
             </div>
         </div>

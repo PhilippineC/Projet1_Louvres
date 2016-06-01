@@ -30,7 +30,7 @@
                 <p><strong>Réservation n° : {{ commande.code }}</strong></p>
             </div>
             <div class="reste_commande">
-                <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }} pour la {{ commande.typeBillet}}</p>
+                <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }}</p>
                 <p>Nombre de billet(s) : {{ commande.nbBillet }}</p>
                 <p> Détail des billet(s) : </p>
                 <div id="details_billets">
@@ -77,13 +77,24 @@
         <div class="paiement">
             <div class="container row">
                 <div id="form_type_billet">
-                    {% for child in form.moyenPaiement %}
-                        <div class="radio">
-                            {{ form_widget(child, {'attr': {'class': child.vars.label}}) }}
-                            {{ child.vars.label }}
-                        </div>
-                    {% endfor %}
-                    {{ form_errors(form.moyenPaiement) }}
+                    <div class="radio">
+                        {% for child in form.moyenPaiement %}
+                            <div class="radio">
+                                {{ form_widget(child, {'attr': {'class': child.vars.label}}) }}
+                                {% if child.vars.label == 'Paypal' %}
+                                    {% image '@LouvresCommandeBundle/Resources/public/images/paypal2.png' %}
+                                    <img src="{{ asset_url }}" alt="paypal" width=70 height=30/>
+                                    {% endimage %}
+                                {% endif %}
+                                {% if child.vars.label == 'Carte Bleue' %}
+                                    {% image '@LouvresCommandeBundle/Resources/public/images/stripe_cards.png' %}
+                                    <img src="{{ asset_url }}" alt="visa" width=200 height=30/>
+                                    {% endimage %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        {{ form_errors(form.moyenPaiement) }}
+                    </div>
                 </div>
             </div>
         </div>

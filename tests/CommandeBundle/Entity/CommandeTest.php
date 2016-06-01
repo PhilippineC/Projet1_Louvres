@@ -152,9 +152,21 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->setTypeBillet('demi-journee');
-        $time = new \DateTime();
-        $this->commande->setDateVisite($time);
+        $this->commande->setDateVisite(new \DateTime());
 //Attention il faut forcer l'heure du jour à 14h
+        $message = 'Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui';
+        $context = $this
+             ->getMockBuilder('Symfony\Component\Validator\Context\ExecutionContextInterface')
+             ->disableOriginalConstructor()
+             ->getMock();
+        $context
+            ->expects($this->once())
+            ->method('buildViolation')
+            ->with($message, array());
+        /*    ->willReturn($message);*/
+
+   /*     $this->assertEquals($this->commande->isTypeBilletValide(), $context->buildViolation());
+
     }*/
 
 

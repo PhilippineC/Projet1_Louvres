@@ -456,9 +456,11 @@ class Commande
         $now = (new \DateTime)->format('Y-m-d H:i:s');
         list($date, $time) = explode(' ', $now);
         $hour = explode(':', $time)[0];
+    /*    $this->setDateVisite(new \DateTime());*/
+    /*    $hour = 15;*/
         if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'demi-journee')) {
             $context
-                ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui. Veuillez sélectionner un billet demi-journée.') // message
+                ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui') // message
                 ->atPath('typeBillet')  // attribut de l'objet qui est violé
                 ->addViolation() // ceci déclenche l'erreur
             ;

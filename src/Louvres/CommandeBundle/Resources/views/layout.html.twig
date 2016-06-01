@@ -11,9 +11,11 @@
 
     <title>{% block title %}{% endblock %}</title>
 
-    {% stylesheets 'bundles/louvrescommande/css/*'  filter='cssrewrite' %}
+    {% block stylesheets %}
+        {% stylesheets 'bundles/louvrescommande/css/*'  filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+        {% endstylesheets %}
+    {% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
@@ -68,8 +70,8 @@
     <footer>
         <div id="payments">
             <span class="hidden-xs">Paiement 100% sécurisé</span>
-            {% image '@LouvresCommandeBundle/Resources/public/images/paypal.png' %}
-            <img src="{{ asset_url }}" alt="paypal" width=70 height=40/>
+            {% image '@LouvresCommandeBundle/Resources/public/images/paypal2.png' %}
+            <img src="{{ asset_url }}" alt="paypal" width=70 height=30/>
             {% endimage %}
             {% image '@LouvresCommandeBundle/Resources/public/images/mastercard.gif' %}
             <img src="{{ asset_url }}" alt="master" width=60 height=30/>

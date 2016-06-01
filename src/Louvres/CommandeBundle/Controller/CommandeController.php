@@ -39,13 +39,11 @@ class CommandeController extends Controller
         if ($formCommande->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
-        /*    $commande->setDateVisite(new \DateTime("2016-07-11"));*/
+         /*   $commande->setDateVisite(new \DateTime("2016-07-11"));*/
             /* On vérifie que la date de visite selectionnée ne soit pas dans les dates COMPLET*/
             for ($i = 0; $i<count($datesComplet) ;$i++ ) {
                 if ($commande->getDateVisite() == $datesComplet[$i]['dateVisite']) {
                     $this->get('session')->getFlashBag()->add('info', 'Toutes les places ont été vendues pour la date selectionnée. Veuillez choisir une autre date.' );
-                    $new_commande = new Commande(); // Création d'un nouveau formulaire pour ne pas avoir les champs préremplis dans le data-prototype à la fin de la page
-                    $formCommande = $this->createForm(CommandeType::class, $new_commande);
                     return $this->render('LouvresCommandeBundle:Commande:index.html.twig', array(
                         'formCommande' =>$formCommande->createView(),
                         'Dates_complet' => $datesComplet_JSON

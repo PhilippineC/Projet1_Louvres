@@ -70,8 +70,8 @@ $(function() {
         onSelect: function (date_select) {
             $("#date_selectionnee").replaceWith('<p id="date_selectionnee"> Vous avez selectionné le ' + date_select + '.</p>');
             $("#jour_visite").text(date_select);
-            $('#form_type_billet').show('slow');
-            $('#info_visiteur').show('slow');
+        /*    $('#form_type_billet').show('slow');
+            $('#info_visiteur').show('slow');*/
             /*récupérer l'heure du jour si la réservation se fait le jour même*/
             var today = new Date();
             if ((parseInt(today.getDate()) == date_select.substring(0,2)) &&
@@ -88,7 +88,8 @@ $(function() {
         }
     };
     $.datepicker.setDefaults($.datepicker.regional['fr']);
-    $("#commande_dateVisite").datepicker().attr("readonly", "readonly");
+    $("#commande_dateVisite").datepicker();
+  /*  $("#commande_dateVisite").datepicker().attr("readonly", "readonly");*/
 });
 
 /* ******************** DEROULEMENT DE LE SUITE DE LA COMMANDE ********************** */
@@ -388,11 +389,11 @@ $(function() {
 
 // Au chargement de la page, on cache les messages d'erreur
     $('.max7billets').hide();
-    $('#form_type_billet').hide();
+    $('#form_type_billet').show();
     $('#commande_valider').hide();
-    $('#info_visiteur').hide();
+    $('#info_visiteur').show();
     $('#prix_total').hide();
-    $('div label').hide(); //Manière pas très propre de cacher le label Billets
+/*    $('div label').hide(); //Manière pas très propre de cacher le label Billets*/
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {
