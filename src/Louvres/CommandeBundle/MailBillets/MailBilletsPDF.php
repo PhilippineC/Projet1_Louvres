@@ -44,8 +44,8 @@ class MailBilletsPDF  {
 
         $this->message = \Swift_Message::newInstance();
         $this->message
-            ->setSubject('Votre réservation au Musée du Louvres')
-            ->setFrom(array('louvres@louvres.com' => 'Musée du Louvres'))
+            ->setSubject('Votre réservation au Musée du Louvre')
+            ->setFrom(array('louvre@louvre.com' => 'Musée du Louvre'))
             ->setTo(array($this->commande->getConfirmation()->getMail()))
             ->setBody(
                  $this->template->render(
