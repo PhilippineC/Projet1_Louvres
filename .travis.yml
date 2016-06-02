@@ -24,7 +24,7 @@ env:
 before_install:
     - composer self-update --stable --no-interaction
     - composer install --no-interaction
-    - wget http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.53.0.jar
+    - java -jar http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.53.0.jar
 
 script:
     - ./bin/phpunit tests
