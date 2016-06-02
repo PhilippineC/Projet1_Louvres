@@ -28,4 +28,4 @@ before_install:
     - java -jar selenium-server-standalone-2.47.1.jar > /dev/null &
 
 script:
-    - ./bin/phpunit tests
+    - phpunit tests
