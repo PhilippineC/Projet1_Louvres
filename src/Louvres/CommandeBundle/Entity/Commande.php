@@ -453,12 +453,12 @@ class Commande
     public function isTypeBilletValide(ExecutionContextInterface $context)
     {
         // On vérifie que le billet est bien de type demi-journee pour une dateVisite à aujourd'hui après 14h
-        $now = (new \DateTime)->format('Y-m-d H:i:s');
-        list($date, $time) = explode(' ', $now);
+        list($date, $time) = explode(' ', $this->dateCom->format('Y-m-d H:i:s'));
         $hour = explode(':', $time)[0];
     /*    $this->setDateVisite(new \DateTime());*/
     /*    $hour = 15;*/
         if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'demi-journee')) {
+            var_dump($context);
             $context
                 ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui') // message
                 ->atPath('typeBillet')  // attribut de l'objet qui est violé

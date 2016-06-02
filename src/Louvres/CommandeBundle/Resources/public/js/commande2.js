@@ -70,8 +70,8 @@ $(function() {
         onSelect: function (date_select) {
             $("#date_selectionnee").replaceWith('<p id="date_selectionnee"> Vous avez selectionné le ' + date_select + '.</p>');
             $("#jour_visite").text(date_select);
-        /*    $('#form_type_billet').show('slow');
-            $('#info_visiteur').show('slow');*/
+            $('#form_type_billet').show('slow');
+            $('#info_visiteur').show('slow');
             /*récupérer l'heure du jour si la réservation se fait le jour même*/
             var today = new Date();
             if ((parseInt(today.getDate()) == date_select.substring(0,2)) &&
@@ -88,8 +88,8 @@ $(function() {
         }
     };
     $.datepicker.setDefaults($.datepicker.regional['fr']);
-    $("#commande_dateVisite").datepicker();
-  /*  $("#commande_dateVisite").datepicker().attr("readonly", "readonly");*/
+/*    $("#commande_dateVisite").datepicker();*/
+    $("#commande_dateVisite").datepicker().attr("readonly", "readonly");
 });
 
 /* ******************** DEROULEMENT DE LE SUITE DE LA COMMANDE ********************** */
@@ -106,7 +106,7 @@ var TEXT = {
     enfant : 'tarif enfant (de 4 à 12 ans) : ' + TARIFS.enfant + '€',
     normal : 'tarif normal : ' + TARIFS.normal + '€',
     senior : 'tarif sénior (à partir de 60 ans) : ' + TARIFS.senior + '€',
-    reduit : 'tarif réduit : ' + TARIFS.reduit + '€ (une pièce justificative vous sera demandé à l\'entrée.)',
+    reduit : 'tarif réduit : ' + TARIFS.reduit + '€ (une pièce justificative vous sera demandée à l\'entrée.)',
     famille : 'tarif famille (2 adultes et 2 enfants portant le même nom de famille) : ' + TARIFS.famille + '€'
 };
 var NB_INPUTS = 4; // nb d'inputs par formulaire (prenom, nom, date_naisance et tarif)
@@ -387,13 +387,12 @@ function Commande(Billets, type) {
 $(function() {
 /* *********************PARTIE JQUERY MANIPULATION DU DOM *************** */
 
-// Au chargement de la page, on cache les messages d'erreur
+// Au chargement de la page, on cache les messages d'erreur et les blocs qui apparaitront au fur et à mesure de la commande
     $('.max7billets').hide();
-    $('#form_type_billet').show();
+    $('#form_type_billet').hide();
     $('#commande_valider').hide();
-    $('#info_visiteur').show();
+    $('#info_visiteur').hide();
     $('#prix_total').hide();
-/*    $('div label').hide(); //Manière pas très propre de cacher le label Billets*/
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {

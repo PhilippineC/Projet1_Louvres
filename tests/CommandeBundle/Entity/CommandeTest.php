@@ -5,6 +5,7 @@ namespace Tests\CommandeBundle\Entity;
 
 use Louvres\CommandeBundle\Entity\Billet;
 use Louvres\CommandeBundle\Entity\Commande;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CommandeTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,11 +15,12 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
     private $billet3;
     private $billet4;
     private $billet5;
+    private $hour; // Forcer l'heure du jour à 15h pour tester le type de billet
 
     public function setUp()
     {
         $this->commande = new Commande();
-
+        $this->hour = 15;
         $this->billet1 = new Billet();
         $this->billet1->setNom('Dupont');
         $this->billet1->setDateNaissance(new \DateTime('01/01/1984'));
@@ -148,26 +150,42 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Commande::TARIF_FAMILLE + Commande::TARIF_SENIOR, $this->commande->getPrixTotal());
     }
 
-/*    public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
+    public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
     {
         $this->commande->addBillet($this->billet1);
         $this->commande->setTypeBillet('demi-journee');
         $this->commande->setDateVisite(new \DateTime());
-//Attention il faut forcer l'heure du jour à 14h
+//Il faut forcer l'heure du jour à 15h
+        $this->commande->setDateCom((new \DateTime())->setTime(15,0,0));
+    /*    $validator = $context->getValidator();
+        $violations = $validator->validate($this->commande->getTypeBillet());*/
         $message = 'Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui';
         $context = $this
              ->getMockBuilder('Symfony\Component\Validator\Context\ExecutionContextInterface')
              ->disableOriginalConstructor()
              ->getMock();
-        $context
+       $context
             ->expects($this->once())
             ->method('buildViolation')
             ->with($message, array());
-        /*    ->willReturn($message);*/
+        $context
+            ->expects($this->once())
+            ->method('addViolation')
+            ->with($message, array());
+        $builder = $this
+            ->getMockBuilder('Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $builder
+            ->expects($this->once())
+            ->method('atPath')
+            ->with('typeBillet');
 
-   /*     $this->assertEquals($this->commande->isTypeBilletValide(), $context->buildViolation());
+        $violations = $this->commande->IsTypeBilletValide($context);
 
-    }*/
+       $this->assertEquals(1, $violations->count());
+
+    }
 
 
 }
