@@ -10,7 +10,7 @@ namespace Louvres\CommandeBundle\Repository;
  */
 class CommandeRepository extends \Doctrine\ORM\EntityRepository
 {
-    CONST MAX_PLACES_PAR_JOUR = 3;
+    CONST MAX_PLACES_PAR_JOUR = 1000;
     function getDatesComplet()
     {
         $qb = $this->createQueryBuilder('a')

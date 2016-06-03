@@ -16,7 +16,7 @@ class LoadBillet implements FixtureInterface
         $commande->setDateVisite(new \DateTime('2016-07-11'));
         $commande->setTypeBillet('journee');
         $commande->setStatus('paye');
-        $commande->setCode('LOU');
+        $commande->setCode('LOUVRES000');
         $manager->persist($commande);
 
         // On crée 4 billets qu'on va lier à cette commande
@@ -63,7 +63,7 @@ class LoadBillet implements FixtureInterface
         $commande2->setDateVisite(new \DateTime('2016-07-11'));
         $commande2->setTypeBillet('journee');
         $commande->setStatus('paye');
-        $commande->setCode('LOU');
+        $commande->setCode('LOUVRES001');
         $manager->persist($commande2);
 
         // On crée 4 billets qu'on va lier à cette commande
