@@ -457,7 +457,7 @@ class Commande
         $hour = explode(':', $time)[0];
     /*    $this->setDateVisite(new \DateTime());*/
     /*    $hour = 15;*/
-        if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'demi-journee')) {
+        if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'journee')) {
             var_dump($context);
             $context
                 ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui') // message
