@@ -481,6 +481,4 @@ $(function() {
         });
     }
     verif_formulaire();
-
-
 });
