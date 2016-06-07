@@ -6,8 +6,10 @@ namespace Tests\CommandeBundle\Entity;
 use Louvres\CommandeBundle\Entity\Billet;
 use Louvres\CommandeBundle\Entity\Commande;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilder;
 
 class CommandeTest extends \PHPUnit_Framework_TestCase
 {
@@ -171,7 +173,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
     {
-  /*    $this->commande->addBillet($this->billet1);
+ /*       $this->commande->addBillet($this->billet1);
         $this->commande->setTypeBillet('journee');
         $this->commande->setDateVisite(new \DateTime());
 //Il faut forcer l'heure du jour à 15h
@@ -181,34 +183,33 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
         $message = 'Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui';
         $context = $this
-             ->getMockBuilder('Symfony\Component\Validator\Context\ExecutionContextInterface')
-             ->setMethods(array('buildViolation', 'atPath', 'addViolation)'))
-             ->disableOriginalConstructor()
-             ->getMock();
-      $context
-            ->expects($this->once())
-            ->method('buildViolation')
-            ->with($message, array())
-            ->will($this->returnValue($message));
-
-        $context
-            ->expects($this->once())
-            ->method('addViolation')
-            ->with($message, array());
-        $builder = $this
-            ->getMockBuilder('Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface')
+            ->getMockBuilder(ExecutionContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $builder
-            ->expects($this->once())
-            ->method('atPath')
-            ->with('typeBillet');
+        $context2 = $this
+            ->getMockBuilder(ExecutionContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $constraint = $this
+            ->getMockBuilder(ConstraintViolationBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-      $violations = $this->commande->IsTypeBilletValide($context);
+        $context
+            ->method('buildViolation')
+            ->with($message)
+             ->willReturn($constraint);
+        $constraint
+            ->method('atPath')
+            ->with('typeBillet')
+            ->willReturn($context2);
+        $context2
+            ->method('addViolation')
+            ->with($message)
+            ->willReturn($message);
+
+        $violations = $this->commande->IsTypeBilletValide($context);
 
        $this->assertEquals(1, $violations->count());*/
-
     }
-
-
 }
