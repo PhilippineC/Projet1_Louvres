@@ -12,9 +12,6 @@ php:
     - "nightly"
     - "hhvm"
 
-services:
-    - mysql
-
 matrix:
     allow_failures:
         -php: nightly
@@ -29,7 +26,6 @@ before_install:
     - composer install --no-interaction
     - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
     - java -jar selenium-server-standalone-2.47.1.jar > /dev/null &
-    - mysql -e "create database IF NOT EXISTS louvres;" -uroot
 
 script:
-    - ./bin/phpunit tests
+    - phpunit tests
