@@ -11,7 +11,7 @@ Feature: TestHomePage
   @javascript
   Scenario Outline: TestFormBilletFailed
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I wait for 1 seconds
     And I fill in "<input>" with "<input_text>"
     Then I should see "<message>"

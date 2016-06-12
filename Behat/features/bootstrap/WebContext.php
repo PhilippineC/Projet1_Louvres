@@ -13,16 +13,15 @@ class WebContext extends MinkContext {
     }
 
     /**
-     * @When I select today in datepicker
+     * @When I select a selectable day in datepicker
      */
-    public function iSelectTodayInDatepicker()
+    public function iSelectASelectableDayInDatepicker()
     {
         $el = $this->getSession()->getPage()->find('css', '#commande_dateVisite');
         $el->mouseOver();
         $el->click();
 
-        $date = $this->getSession()->getPage()->find('css', '.ui-datepicker-today');
-        $date->mouseOver();
+        $date = $this->getSession()->getPage()->find('css', 'a.ui-state-default');
         $date->click();
     }
 

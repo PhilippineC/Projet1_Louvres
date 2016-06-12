@@ -4,7 +4,7 @@ Feature: TestConfirmationPage
   @javascript
   Scenario: TestBilletsFamilletUnSeniorEmailFailed
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "03/04/1988"

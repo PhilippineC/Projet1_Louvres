@@ -4,7 +4,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestBilletNormal
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "13/10/1990"
@@ -22,7 +22,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestBilletsSeniorPlusEnfant
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I follow "Ajouter un billet"
@@ -44,9 +44,9 @@ Feature: MultipleScenarii
     Then I should not see "Merci de saisir une adresse email valide"
 
   @javascript
-  Scenario: TestBilletsEnfantPluReduit
+  Scenario: TestBilletsEnfantPlusReduit
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     Then I check "Tarif réduit"
@@ -71,7 +71,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestBilletFamille
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "03/04/1988"
@@ -101,7 +101,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestBilletReduit
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I select "demi-journee" from "commande[typeBillet]"
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
@@ -119,9 +119,23 @@ Feature: MultipleScenarii
     Then I should not see "Merci de saisir une adresse email valide"
 
   @javascript
+  Scenario: TestBilletGratuit
+    Given I am on the homepage
+    When I select a selectable day in datepicker
+    And I fill in "commande_billets_0_nom" with "Dupont"
+    And I fill in "commande_billets_0_prenom" with "Marie"
+    And I fill in "commande_billets_0_dateNaissance" with "03/04/2016"
+    Then I should see "1 billet gratuit"
+    And I should see "0 €"
+    When I press "commande_valider"
+    Then I should see "Confirmation de votre commande"
+    And I should see "tarif gratuit"
+    And I should see "0 €"
+
+  @javascript
   Scenario: TestBilletReduitCheckAndUncheck
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "03/04/1988"
@@ -143,7 +157,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestAddAndDeleteBillet
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I select "demi-journee" from "commande[typeBillet]"
     Then I follow "Ajouter un billet"
     And I follow "Supprimer ce billet"
@@ -164,7 +178,7 @@ Feature: MultipleScenarii
   @javascript
   Scenario: TestBilletFamilleMemeSiReduitCoche
     Given I am on the homepage
-    When I select today in datepicker
+    When I select a selectable day in datepicker
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "03/04/1988"
