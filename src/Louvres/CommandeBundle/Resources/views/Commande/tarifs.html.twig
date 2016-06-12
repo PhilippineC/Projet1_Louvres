@@ -1,0 +1,77 @@
+{% extends "LouvresCommandeBundle::layout.html.twig" %}
+
+{% block title %}
+    Tarifs - Musée du Louvre
+{% endblock %}
+
+{% block nav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div class="encart_gris">
+            <div class="container-fluid">
+                <p>Tarifs des billets du Louvre</p>
+            </div>
+        </div>
+        <div class="tableau_tarifs">
+            <table class="table table-responsive table-bordered table-hover">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>Tarif</th>
+                    <th>Condition</th>
+                    <th>Prix TTC</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Gratuit</td>
+                    <td>Avoir moins de 4 ans</td>
+                    <td>0€</td>
+                </tr>
+                <tr>
+                    <td>Enfant</td>
+                    <td>Avoir entre 4 et 12 ans</td>
+                    <td>8€</td>
+                </tr>
+                <tr>
+                    <td>Normal</td>
+                    <td>A partir de 12 ans</td>
+                    <td>16€</td>
+                </tr>
+                <tr>
+                    <td>Sénior</td>
+                    <td>Avoir plus de 60 ans</td>
+                    <td>12€</td>
+                </tr>
+                <tr>
+                    <td>Réduit</td>
+                    <td>Etre étudiant, employé du musée, d’un service du Ministère de la Culture, militaire</td>
+                    <td>10€</td>
+                </tr>
+                <tr>
+                    <td>Famille</td>
+                    <td>Pour 2 adultes et 2 enfants portant le même nom de famille</td>
+                    <td>35€</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="tarifs_pied_page">
+                <a href="{{ path('Louvres_commande_home') }}"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> Réserver des billets</a>
+                <p>Lors de votre commande, les tarifs seront calculés automatiquement en fonction des dates de naissance, noms de famille et cases "tarif réduit" cochées.</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}
+

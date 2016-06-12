@@ -2,6 +2,18 @@ Louvres_commande_home:
         path:     /
         defaults: { _controller: LouvresCommandeBundle:Commande:home }
 
+Louvres_commande_tarifs:
+        path:     /tarifs
+        defaults: { _controller: LouvresCommandeBundle:Commande:tarifs }
+
+Louvres_commande_contact:
+        path:     /contact
+        defaults: { _controller: LouvresCommandeBundle:Commande:contact }
+
+Louvres_commande_mentionsLegales:
+        path:     /mentionslegales
+        defaults: { _controller: LouvresCommandeBundle:Commande:mentions }
+
 Louvres_commande_confirmation:
         path:     /confirmation/{code}
         defaults: { _controller: LouvresCommandeBundle:Commande:confirmation }

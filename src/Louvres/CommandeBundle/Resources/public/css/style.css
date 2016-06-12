@@ -4,6 +4,16 @@ body {
     background-color: #313330;
 }
 
+a:hover, a:focus {
+    color: black;
+    text-decoration: underline;
+}
+
+a {
+    color: #c72d01;
+    text-decoration: none;
+}
+
 .navbar-default {
     background-color: #222222;
     border-color: transparent;
@@ -30,6 +40,10 @@ body {
 
 .logo {
     margin-top : 24px;
+}
+
+.billet_link .glyphicon {
+    font-size: 0.8em;
 }
 
 h1 {
@@ -77,9 +91,23 @@ h1 {
     padding-top: 5px;
 }
 
-.date_picker, .type_billet , #nbr_billet, #prix_total, #info_visiteur, .email, .paiement, .com_valide, .paiement_stripe, .valider {
+.date_picker, .type_billet , #nbr_billet, #prix_total, #info_visiteur, .email, .paiement, .com_valide, .paiement_stripe, .valider, .tableau_tarifs, .contact {
     background-color: white;
     padding-bottom : 5px;
+}
+ .contact {
+     padding-left: 40px;
+     padding-top : 10px;
+ }
+
+.tableau_tarifs {
+    padding : 10px;
+    padding-left: 40px;
+}
+
+.tarifs_pied_page p {
+    font-size: 0.9em;
+    font-style: italic;
 }
 
 .dateVisite {
@@ -141,11 +169,6 @@ label {
 
 #form_type_billet {
     margin-left: 50px;
-}
-
-.tableau_tarifs {
-    margin-top: 5px;
-    padding-left: 40px;
 }
 
 .option_nbbillets {
@@ -385,6 +408,15 @@ ul {
 }
 
 .aide a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.tarifs_pied_page a {
+    color: #c72d01;
+}
+
+.tarifs_pied_page a:hover {
     text-decoration: none;
     color: black;
 }

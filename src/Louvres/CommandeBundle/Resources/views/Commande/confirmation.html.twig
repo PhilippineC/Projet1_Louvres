@@ -10,7 +10,7 @@
 
 {% block body %}
     <div class="container-fluid row">
-        <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12 col-sm-12">
             {% for message in app.session.flashbag.get('info') %}
                 <div class="alert alert-warning text-center">{{ message }}</div>
             {% endfor %}

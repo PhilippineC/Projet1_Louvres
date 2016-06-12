@@ -1,0 +1,38 @@
+{% extends "LouvresCommandeBundle::layout.html.twig" %}
+
+{% block title %}
+    Contact - Musée du Louvre
+{% endblock %}
+
+{% block nav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div class="encart_gris">
+            <div class="container-fluid">
+                <p>Contactez-nous</p>
+            </div>
+        </div>
+        <div class="contact">
+            <p><strong> Musée du Louvre</strong> </p>
+            <p>
+                75058 Paris CEDEX 01 <br/>
+                France <br/>
+                Téléphone :+ 33 (0)1 40 20 50 50 <br/>
+                adresse email : contact@louvre.fr
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}
+

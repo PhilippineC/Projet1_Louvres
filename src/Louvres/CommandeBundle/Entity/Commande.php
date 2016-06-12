@@ -356,6 +356,9 @@ class Commande
                         $this->addPrixTotal(self::TARIF_SENIOR);
                         $billet->setTarifCalcule(Billet::BILLET_SENIOR);
                         break;
+                    case Billet::BILLET_GRATUIT:
+                        $billet->setTarifCalcule(Billet::BILLET_GRATUIT);
+                        break;
                 }
             }
         }

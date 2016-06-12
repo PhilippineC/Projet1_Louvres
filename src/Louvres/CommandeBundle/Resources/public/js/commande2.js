@@ -80,10 +80,12 @@ $(function() {
                 (today.getHours() > 13 )) {
                 $('.Journée').hide('slow');
                 $('input[class^="Demi"]').attr('checked', true);
+                $('#type_billet').text(' à partir de 14h');
             }
             else {
                 $('.Journée').attr('checked', true);
                 $('.Journée').show('slow');
+                $('#type_billet').text(' pour la journée');
             }
         }
     };

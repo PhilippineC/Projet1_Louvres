@@ -91,4 +91,18 @@ class CommandeController extends Controller
             'commande' =>$commande
         ));
     }
+
+    public function tarifsAction()
+    {
+        return $this->render('LouvresCommandeBundle:Commande:tarifs.html.twig');
+    }
+
+    public function contactAction()
+    {
+        return $this->render('LouvresCommandeBundle:Commande:contact.html.twig');
+    }
+    public function mentionsAction()
+    {
+        return $this->render('LouvresCommandeBundle:Commande:mentions.html.twig');
+    }
 }

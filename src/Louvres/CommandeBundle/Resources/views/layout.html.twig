@@ -36,7 +36,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <span class="navbar-brand hidden-sm hidden-md hidden-lg">Billeterie</span>
+                <span class="navbar-brand hidden-sm hidden-md hidden-lg">Billetterie</span>
             </div>
 
             <div class="collapse navbar-collapse logo">
@@ -84,10 +84,9 @@
             {% endimage %}
         </div>
         <div id="mentions">
-            <a class="col-sm-3" href="#">Tarifs</a>
-            <a class="col-sm-3" href="mailto:billetsLouvre@louvres.fr">Contactez-nous</a>
-            <a class="col-sm-3" href="#">CGV</a>
-            <a class="col-sm-3" href="#">Aide/FAQ</a>
+            <a class="col-sm-4" href="{{ path('Louvres_commande_tarifs') }}">Tarifs</a>
+            <a class="col-sm-4" href="{{ path('Louvres_commande_contact') }}">Contactez-nous</a>
+            <a class="col-sm-4" href="{{ path('Louvres_commande_mentionsLegales') }}">Mentions légales</a>
         </div>
     </footer>
 
