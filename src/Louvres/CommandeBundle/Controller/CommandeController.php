@@ -39,7 +39,6 @@ class CommandeController extends Controller
         if ($formCommande->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($commande);
-         /*   $commande->setDateVisite(new \DateTime("2016-07-11"));*/
             /* On vérifie que la date de visite selectionnée ne soit pas dans les dates COMPLET*/
             for ($i = 0; $i<count($datesComplet) ;$i++ ) {
                 if ($commande->getDateVisite() == $datesComplet[$i]['dateVisite']) {
