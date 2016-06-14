@@ -461,7 +461,6 @@ class Commande
     /*    $this->setDateVisite(new \DateTime());*/
     /*    $hour = 15;*/
         if (($this->getDateVisite()->format('Y-m-d') == $date) && ($hour > 13) && ($this->getTypeBillet() == 'journee')) {
-            var_dump($context);
             $context
                 ->buildViolation('Vous ne pouvez plus sélectionner un billet journée pour aujourd\'hui') // message
                 ->atPath('typeBillet')  // attribut de l'objet qui est violé

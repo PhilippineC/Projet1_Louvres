@@ -85,25 +85,25 @@ payum:
     gateways:
         billets_paypal :
             factory: paypal_express_checkout
-            username:  'philippine.chombart-facilitator_api1.gmail.com'
-            password:  'SZPMQW4YKSKG8ZFE'
-            signature: 'AdvVrWUW13YUjL9AW3PSyaDdhL6zAX-1uVeWGvpDdp3z--6Yi8TpwYEy'
+            username:  '%payum_paypal_username%'
+            password:  '%payum_paypal_password%'
+            signature: '%payum_paypal_signature%'
             sandbox: true
 
         billets_stripe:
             factory: stripe_checkout
-            publishable_key: 'pk_test_fLGAka6DVwEmTSiRPAQzDCbA'
-            secret_key:      'sk_test_aIBk6ZsRhc7XYV5qlowNYzSh'
+            publishable_key: '%payum_stripe_publishable_key%'
+            secret_key:      '%payum_stripe_secret_key%'
             payum.template.obtain_token: 'LouvresCommandeBundle:Commande:payumStripe.html.twig'
 
 knp_snappy:
     pdf:
         enabled:    true
-        binary:     "\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\""
+        binary:     '%knp_snappy_pdf_binary%'
         options:    []
     image:
         enabled:    true
-        binary:     "\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\""
+        binary:     '%knp_snappy_image_binary%'
         options:    []
 
 knp_snappy:

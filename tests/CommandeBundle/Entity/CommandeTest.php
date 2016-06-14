@@ -46,6 +46,10 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(Billet::class)
             ->setMethods(null)
             ->getMock();
+        $this->billet6 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
 
         $this->billet1->setNom('Dupont');
         $this->billet1->setDateNaissance(new \DateTime('01/01/1984'));
@@ -66,6 +70,10 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->billet5->setNom('Dupond');
         $this->billet5->setDateNaissance(new \DateTime('01/01/1948'));
         $this->billet5->CalculTarif();
+
+        $this->billet6->setNom('Dupond');
+        $this->billet6->setDateNaissance(new \DateTime('01/03/2016'));
+        $this->billet6->CalculTarif();
     }
 
     public function testVerifMemeNomAvecQuatresBillets()
@@ -74,6 +82,8 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
+        $this->commande->addBillet($this->billet5);
+        $this->commande->removeBillet($this->billet5);
         $this->commande->calculPrixTotal();
         $this->assertEquals(4, $this->billet1->getMemeNom());
     }
@@ -171,9 +181,17 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Commande::TARIF_FAMILLE + Commande::TARIF_SENIOR, $this->commande->getPrixTotal());
     }
 
-    public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
+    public function testCalculPrixTotalUnBilletNormalEtUnBilletGratuit()
     {
- /*       $this->commande->addBillet($this->billet1);
+        $this->commande->addBillet($this->billet1);
+        $this->commande->addBillet($this->billet6);
+        $this->commande->calculPrixTotal();
+        $this->assertEquals(Commande::TARIF_NORMAL, $this->commande->getPrixTotal());
+    }
+
+/*    public function testIsTypeBilletValideSiDateVisiteAujourdhuiEtApres14H()
+    {
+        $this->commande->addBillet($this->billet1);
         $this->commande->setTypeBillet('journee');
         $this->commande->setDateVisite(new \DateTime());
 //Il faut forcer l'heure du jour à 15h
@@ -205,11 +223,10 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($context2);
         $context2
             ->method('addViolation')
-            ->with($message)
-            ->willReturn($message);
+             ->willReturn($message);
 
         $violations = $this->commande->IsTypeBilletValide($context);
 
-       $this->assertEquals(1, $violations->count());*/
-    }
+       $this->assertEquals(1, $violations->count());
+    }*/
 }

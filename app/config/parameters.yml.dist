@@ -17,3 +17,12 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    payum_paypal_username: ~
+    payum_paypal_password: ~
+    payum_paypal_signature: ~
+    payum_stripe_publishable_key : ~
+    payum_stripe_secret_key : ~
+    knp_snappy_pdf_binary :          \"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\"
+    knp_snappy_image_binary :        \"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\"
+
