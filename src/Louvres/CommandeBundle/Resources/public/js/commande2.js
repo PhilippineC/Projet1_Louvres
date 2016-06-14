@@ -1,7 +1,7 @@
 
 
 /* ******************** DATEPICKER ********************************* */
-var disableddates_ferie = ["5-1-2016","11-1-2016", "12-25-2016", "5-28-2016"];
+var disableddatesFerie = ["5-1-2016","11-1-2016", "12-25-2016", "5-28-2016"];
 var disableddatesComplet = $('.disableddatesComplet').text(); // On récupère les dates complet
 
 //on enlève les guillements
@@ -15,8 +15,8 @@ for (var i = 0; i <disableddatesComplet.length; i++) {
     disableddatesComplet[i] = disableddatesComplet[i].substr(0,disableddatesComplet[i].length-1);
 
     if (disableddatesComplet[i].substr(3,1) == 0) {// on enlève les éventuelles 0 dans le mois
-        var disableddatesComplet_sansmois = disableddatesComplet[i].substr(0,3) + disableddatesComplet[i].substring(4) ;
-        disableddatesComplet[i] = disableddatesComplet_sansmois;
+        var disableddatesCompletSansMois = disableddatesComplet[i].substr(0,3) + disableddatesComplet[i].substring(4) ;
+        disableddatesComplet[i] = disableddatesCompletSansMois;
     }
 
     if (disableddatesComplet[i].substr(0,1) == 0) {// on enlève les éventuelles 0 dans le jour
@@ -24,8 +24,9 @@ for (var i = 0; i <disableddatesComplet.length; i++) {
     }
 }
 
-var disableddates = (typeof disableddatesComplet === 'undefined') ? disableddates_ferie : disableddates_ferie.concat(disableddatesComplet);
-console.log(disableddates);
+var disabledDates = (typeof disableddatesComplet === 'undefined') ? disableddatesFerie : disableddatesFerie.concat(disableddatesComplet);
+
+/****** Fonction qui renvoie les jours indisponibles (mardi et dimanche) et disponible *******/
 
 function DisableSpecificDates(date) {
     var m = date.getMonth();
@@ -33,10 +34,10 @@ function DisableSpecificDates(date) {
     var y = date.getFullYear();
     var day = date.getDay();
 
-    var currentdate = (m+1) + '-' + d + '-' + y ;
+    var currentDate = (m+1) + '-' + d + '-' + y ;
 
-    for (var i = 0; i < disableddates.length; i++) {
-        if ($.inArray(currentdate, disableddates) != -1 ) {
+    for (var i = 0; i < disabledDates.length; i++) {
+        if ($.inArray(currentDate, disabledDates) != -1 ) {
             return [false];
         }
     }
@@ -46,7 +47,7 @@ function DisableSpecificDates(date) {
         return [true] ;
     }
 }
-
+/*************** Configuration en français du Datepicker ********************/
 $(function() {
     $.datepicker.regional['fr'] = {
         closeText: 'Fermer',
@@ -90,7 +91,6 @@ $(function() {
         }
     };
     $.datepicker.setDefaults($.datepicker.regional['fr']);
-/*    $("#commande_dateVisite").datepicker();*/
     $("#commande_dateVisite").datepicker().attr("readonly", "readonly");
 });
 
@@ -111,7 +111,7 @@ var TEXT = {
     reduit : 'tarif réduit : ' + TARIFS.reduit + '€ (une pièce justificative vous sera demandée à l\'entrée.)',
     famille : 'tarif famille (2 adultes et 2 enfants portant le même nom de famille) : ' + TARIFS.famille + '€'
 };
-var NB_INPUTS = 4; // nb d'inputs par formulaire (prenom, nom, date_naisance et tarif)
+var NB_INPUTS = 4; // nb d'inputs par formulaire (prenom, nom, date_naisance et tarif reduit)
 /* ************************* Déclaration des fonctions **************** */
 //Fonction qui valide une date de naissance
 function ValidateDate(dtValue) {
@@ -130,26 +130,26 @@ function ValidateDate(dtValue) {
 function CalculTarif(date) {
     date = date.split("/").reverse().join("/");
     var tarif;
-    var age_normal = 12, age_enfant = 4, age_senior = 60, age_old = 110;
-    var date_normal, date_enfant, date_senior, date_old, today = new Date(), date_enr = new Date(date);
-    date_normal = new Date(today.getFullYear() - age_normal, today.getMonth(), today.getDate());
-    date_enfant = new Date(today.getFullYear() - age_enfant, today.getMonth(), today.getDate());
-    date_senior = new Date(today.getFullYear() - age_senior, today.getMonth(), today.getDate());
-    date_old = new Date(today.getFullYear() - age_old, today.getMonth(), today.getDate());
-    if ((date_enr > date_enfant) && (date_enr <= today)) {
+    var ageNormal = 12, ageEnfant = 4, ageSenior = 60, ageOld = 110;
+    var dateNormal, dateEnfant, dateSenior, dateOld, today = new Date(), dateEnr = new Date(date);
+    dateNormal = new Date(today.getFullYear() - ageNormal, today.getMonth(), today.getDate());
+    dateEnfant = new Date(today.getFullYear() - ageEnfant, today.getMonth(), today.getDate());
+    dateSenior = new Date(today.getFullYear() - ageSenior, today.getMonth(), today.getDate());
+    dateOld = new Date(today.getFullYear() - ageOld, today.getMonth(), today.getDate());
+    if ((dateEnr > dateEnfant) && (dateEnr <= today)) {
         tarif ='gratuit';
     }
-    else if (date_enr <= date_old) {
+    else if (dateEnr <= dateOld) {
         return false;
     }
-    else if (date_enr <= date_senior) {
+    else if (dateEnr <= dateSenior) {
         tarif ='sénior';
 
     }
-    else if (date_enr <= date_normal) {
+    else if (dateEnr <= dateNormal) {
         tarif ='normal';
     }
-    else if (date_enr <= date_enfant) {
+    else if (dateEnr <= dateEnfant) {
         tarif ='enfant';
     }
     else {
@@ -159,17 +159,15 @@ function CalculTarif(date) {
     return result;
 }
 
-function verif_formulaire() {
+function VerifFormulaire() {
     $('.error').hide();
-    var inputs = $('.billets input');
-    console.log(inputs.length);
-    inputs.on('change keyup', function () {
+    var inputsElts = $('.billets input');
+    inputsElts.on('input change', function () {
         // on traite les 3 types d'input : text, date_naissance et tarif_reduit
         // D'abord la date de naissance qui détermine le tarif
         if (this.id.endsWith('dateNaissance')) {
             if (ValidateDate($(this).val())) {
                 if ($(this).parent().parent().find($('#billet_reduit')).is(':checked') == false) {
-                    /*   if ($(this).parent().parent().next().children().children().is(':checked') == false) {*/
                     $(this).next().hide();
                     $(this).next().next().hide();
                     if (!(CalculTarif($(this).val()))) {
@@ -194,24 +192,24 @@ function verif_formulaire() {
             }
         }
         // Si tous les champs sont remplis correctement, on peut afficher le détail et le tarif
-        FormulaireRempli(inputs);
+        FormulaireRempli(inputsElts);
     });
 }
 
 
 /*Fonction pour valider les champs du formulaire une fois qu'il est complétement rempli*/
 /* et calculer les tarifs spéciaux (réduit, famille)*/
-function FormulaireRempli(inputs) {
+function FormulaireRempli(inputsElts) {
     var tabTarifs = new Array();
-    var nb_form = inputs.length/NB_INPUTS;
-    var inc = 0, Billets = {}, inputs_val = new Array(), commande;
-    inputs.each(function (e) {
+    var nbForm = inputsElts.length/NB_INPUTS;
+    var inc = 0, Billets = {}, inputsVal = new Array();
+    inputsElts.each(function (e) {
         if (this.id.endsWith('reduit')) {
-            inputs_val[e] = this.checked;
+            inputsVal[e] = this.checked;
             inc++;
         }
         else {
-            inputs_val[e] = $(this).val();
+            inputsVal[e] = $(this).val();
         }
         if (this.id.endsWith('dateNaissance')) {
             if (ValidateDate($(this).val())) {
@@ -224,23 +222,23 @@ function FormulaireRempli(inputs) {
             }
         }
     });
-    if ((inc ==  inputs.length) && (inputs.length != 0)) {
+    if ((inc ==  inputsElts.length) && (inputsElts.length != 0)) {
         // Tous les champs sont remplis, on crée les objets
-        for (var i = 0; i < nb_form; i++) { //index, prenom, nom, date_naissance, tarif_reduit
-            Billets[i] = new Billet(i,inputs_val[i*NB_INPUTS], inputs_val[i*NB_INPUTS+1], inputs_val[i*NB_INPUTS+2], inputs_val[i*NB_INPUTS+3]);
+        for (var i = 0; i < nbForm; i++) { //index, prenom, nom, date_naissance, tarif_reduit
+            Billets[i] = new Billet(i,inputsVal[i*NB_INPUTS], inputsVal[i*NB_INPUTS+1], inputsVal[i*NB_INPUTS+2], inputsVal[i*NB_INPUTS+3]);
         }
         // On calcule le tarif famille
         var normal = 0, enfant = 0;
-        var decr_enf = 2, decr_norm = 2;
-        for (var i = 0; i<nb_form; i++) {
-            for (var j = 0; j < nb_form; j++) {
+        var decrEnf = 2, decrNorm = 2;
+        for (var i = 0; i<nbForm; i++) {
+            for (var j = 0; j < nbForm; j++) {
                 if (i !== j) {
                     if (Billets[i].nom == Billets[j].nom) {
-                        Billets[i].meme_nom++;
+                        Billets[i].memeNom++;
                     }
                 }
             }
-            if (Billets[i].meme_nom > 3) {
+            if (Billets[i].memeNom > 3) {
                 switch (Billets[i].tarif) {
                     case 'normal' :
                         normal++;
@@ -252,22 +250,22 @@ function FormulaireRempli(inputs) {
             }
         }
         if ((normal > 1) && (enfant > 1)) {
-            for (i = 0; i<nb_form; i++) {
-                if (Billets[i].meme_nom > 3) {
-                    if ((Billets[i].tarif == 'enfant') && (decr_enf > 0)) {
+            for (i = 0; i<nbForm; i++) {
+                if (Billets[i].memeNom > 3) {
+                    if ((Billets[i].tarif == 'enfant') && (decrEnf > 0)) {
                         Billets[i].tarif = 'Famille';
                         Billets[i].famille = true;
-                        decr_enf --;
+                        decrEnf --;
                     }
-                    if ((Billets[i].tarif == 'normal') && (decr_norm > 0)){
+                    if ((Billets[i].tarif == 'normal') && (decrNorm > 0)){
                         Billets[i].tarif = 'Famille';
                         Billets[i].famille = true;
-                        decr_norm --;
+                        decrNorm --;
                     }
                 }
             }
         }
-        for (i = 0; i<nb_form; i++) {
+        for (i = 0; i<nbForm; i++) {
             if (Billets[i].famille) {
                 Billets[i].text = TEXT.famille;
             }
@@ -301,86 +299,86 @@ function FormulaireRempli(inputs) {
 
 // fonction qui calcule le prix de la commande en fonction d'un tableau des tarifs
 function CalculPrixCommande(tabTarifs) {
-    var prix_total = 0;
+    var prixTotal = 0;
     for (var nom in tabTarifs) {
         $('#details_billets').append('<p>1 Billet ' + tabTarifs[nom] + '</p>');
         switch (tabTarifs[nom]) {
             case (TEXT.gratuit): { break;}
             case (TEXT.enfant) : {
-                prix_total += TARIFS.enfant;
+                prixTotal += TARIFS.enfant;
                 break;
             }
             case (TEXT.normal) : {
-                prix_total += TARIFS.normal;
+                prixTotal += TARIFS.normal;
                 break;
             }
             case (TEXT.senior) : {
-                prix_total += TARIFS.senior;
+                prixTotal += TARIFS.senior;
                 break;
             }
             case (TEXT.reduit) : {
-                prix_total += TARIFS.reduit;
+                prixTotal += TARIFS.reduit;
                 break;
             }
             case (TEXT.famille) : {
-                prix_total += TARIFS.famille;
+                prixTotal += TARIFS.famille;
                 break;
             }
         }
     }
-    return prix_total;
+    return prixTotal;
 }
 /* ************************* Déclaration des objets **************** */
 // Objet Billet
-function Billet(index, nom, prenom, date_naissance, reduit) {
+function Billet(index, nom, prenom, dateNaissance, reduit) {
     this.index = index;
     this.nom = nom;
     this.prenom = prenom;
-    this.date_naissance = date_naissance;
+    this.dateNaissance = dateNaissance;
     this.reduit = reduit;
-    this.tarif = CalculTarif(this.date_naissance);
-    this.meme_nom = 1;
+    this.tarif = CalculTarif(this.dateNaissance);
+    this.memeNom = 1;
     this.famille = false;
     this.texte = function (tarif) {
-        var texte_retour;
+        var texteRetour;
         switch (tarif) {
             case ('gratuit'):
             {
-                texte_retour = TEXT.gratuit;
+                texteRetour = TEXT.gratuit;
                 break;
             }
             case ('enfant') :
             {
-                texte_retour = TEXT.enfant;
+                texteRetour = TEXT.enfant;
                 break;
             }
             case ('normal') :
             {
-                texte_retour = TEXT.normal;
+                texteRetour = TEXT.normal;
                 break;
             }
             case ('sénior') :
             {
-                texte_retour = TEXT.senior;
+                texteRetour = TEXT.senior;
                 break;
             }
             case ('réduit') :
             {
-                texte_retour = TEXT.reduit;
+                texteRetour = TEXT.reduit;
                 break;
             }
             case ('famille') :
             {
-                texte_retour = TEXT.famille;
+                texteRetour = TEXT.famille;
                 break;
             }
         }
-        return texte_retour;
+        return texteRetour;
     };
     this.text = this.texte(this.tarif);
 }
 
-// Objet Commande
+// Objet Commande (ne sert pas pour l'instant)
 function Commande(Billets, type) {
     this.billets = Billets;
     this.type = type;
@@ -404,7 +402,7 @@ $(function() {
         if ($(':radio[class^="Demi"]:checked').val()) {
             $('#type_billet').text(' à partir de 14h');
         }
-        verif_formulaire();
+        VerifFormulaire();
         FormulaireRempli($('.billets input'));
     });
 });
@@ -417,7 +415,7 @@ $(function() {
     var $addLink = $('<a href="#" class="billet_link"><span class="glyphicon glyphicon-plus"></span>  Ajouter un billet</a>');
     $container.append($addLink);
     // On ajoute un message pour dire qu'on ne peut pas commander plus de 7 billet par commande
-    $avertissement = $('<div><span class="max7billets">Vous ne pouvez pas commander plus de 7 billets par commande.</span></div>');
+    var $avertissement = $('<div><span class="max7billets">Vous ne pouvez pas commander plus de 7 billets par commande.</span></div>');
     $('.billet_link').after($avertissement);
     $('.max7billets').hide();
 
@@ -428,9 +426,9 @@ $(function() {
             return false;
         }
         else {
-            addCategory($container);
+            addBillet($container);
             e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-            verif_formulaire();
+            VerifFormulaire();
             FormulaireRempli($('.billets input'));
             return false;
         }
@@ -441,22 +439,22 @@ $(function() {
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un.
     if (index == 0) {
-        addCategory($container);
+        addBillet($container);
     } else {
-        // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
+        // Pour chaque billet déjà existant, on ajoute un lien de suppression
         $container.children('div').each(function () {
             addDeleteLink($(this));
         });
     }
 
-    // La fonction qui ajoute un formulaire Categorie
-    function addCategory($container) {
+    // La fonction qui ajoute un formulaire billet
+    function addBillet($container) {
         // Dans le contenu de l'attribut « data-prototype », on remplace :
         // - le texte "__name__label__" qu'il contient par le label du champ
         // - le texte "__name__" qu'il contient par le numéro du champ
         var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Billet n°' + (index+1))
             .replace(/__name__/g, index));
-        // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+        // On ajoute au prototype un lien pour pouvoir supprimer le billet
         addDeleteLink($prototype);
         // On ajoute le prototype modifié à la fin de la balise <div>
         $container.append($prototype);
@@ -465,7 +463,7 @@ $(function() {
         index++;
     }
 
-    // La fonction qui ajoute un lien de suppression d'une catégorie
+    // La fonction qui ajoute un lien de suppression d'un billet
     function addDeleteLink($prototype) {
         // Création du lien
         $deleteLink = $('<a href="#" class="billet_link col-xs-offset-7 col-sm-offset-9 col-md-offset-7 col-lg-offset-6">Supprimer ce billet</a>');
@@ -476,11 +474,11 @@ $(function() {
             $prototype.remove();
             e.preventDefault(); // évite qu'un # apparaisse dans l'URL
             index--;
-            verif_formulaire();
+            VerifFormulaire();
             FormulaireRempli($('.billets input'));
             /* ****   */
             return false;
         });
     }
-    verif_formulaire();
+    VerifFormulaire();
 });
