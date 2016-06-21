@@ -26,7 +26,7 @@ for (var i = 0; i <disableddatesComplet.length; i++) {
 
 var disabledDates = (typeof disableddatesComplet === 'undefined') ? disableddatesFerie : disableddatesFerie.concat(disableddatesComplet);
 
-/****** Fonction qui renvoie les jours indisponibles (mardi et dimanche) et disponible *******/
+/* ***** Fonction qui renvoie les jours indisponibles (mardi et dimanche) et disponible ****** */
 
 function DisableSpecificDates(date) {
     var m = date.getMonth();
@@ -47,7 +47,7 @@ function DisableSpecificDates(date) {
         return [true] ;
     }
 }
-/*************** Configuration en français du Datepicker ********************/
+/* ************** Configuration en français du Datepicker ******************* */
 $(function() {
     $.datepicker.regional['fr'] = {
         closeText: 'Fermer',
