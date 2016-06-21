@@ -25,17 +25,30 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
     {
         $this->commande = new Commande();
         $this->hour = 15;
-        $mock = $this
+        $this->billet1 = $this
             ->getMockBuilder(Billet::class)
             ->setMethods(null)
             ->getMock();
-
-        $this->billet1 = $mock;
-        $this->billet2 = $mock;
-        $this->billet3 = $mock;
-        $this->billet4 = $mock;
-        $this->billet5 = $mock;
-        $this->billet6 = $mock;
+        $this->billet2 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
+        $this->billet3 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
+        $this->billet4 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
+        $this->billet5 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
+        $this->billet6 = $this
+            ->getMockBuilder(Billet::class)
+            ->setMethods(null)
+            ->getMock();
 
         $this->billet1->setNom('Dupont');
         $this->billet1->setDateNaissance(new \DateTime('01/01/1984'));
