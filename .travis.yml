@@ -9,8 +9,8 @@ cache:
 php:
     - "5.6"
     - "7.0"
-    - "nightly"
-    - "hhvm"
+    - nightly
+    - hhvm
 
 matrix:
     allow_failures:
