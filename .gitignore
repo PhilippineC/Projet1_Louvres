@@ -14,7 +14,5 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/Behat/vendor/
-/Behat/selenium-server-standalone-2.53.0.jar
-/Behat/composer.phar
+/selenium-server-standalone-2.53.0.jar
 /behat.yml
