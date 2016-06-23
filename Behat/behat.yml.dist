@@ -1,9 +1,0 @@
-default:
-    extensions:
-        Behat\MinkExtension:
-            base_url: http://localhost:8080/app_test.php
-            goutte: ~
-            selenium2 : ~
-    suites:
-        default:
-            contexts: [FeatureContext, WebContext]
