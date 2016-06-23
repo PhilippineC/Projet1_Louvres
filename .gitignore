@@ -17,4 +17,4 @@
 /Behat/vendor/
 /Behat/selenium-server-standalone-2.53.0.jar
 /Behat/composer.phar
-/Behat/behat.yml
+/behat.yml

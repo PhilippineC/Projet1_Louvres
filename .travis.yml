@@ -27,7 +27,7 @@ before_install:
     - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
     - java -jar selenium-server-standalone-2.47.1.jar > /dev/null &
     - sleep 5
-    - cp Behat/behat.yml.dist Behat/behat.yml
+    - cp behat.yml.dist behat.yml
     - php bin/console server:start --env=test
 
 script:
