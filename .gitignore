@@ -16,4 +16,5 @@
 /web/bundles/
 /selenium-server-standalone-2.53.0.jar
 /behat.yml
-/bin/
+/bin/*
+!/bin/console
