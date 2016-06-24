@@ -25,7 +25,7 @@ before_install:
     - composer self-update --stable --no-interaction
     - composer install --no-interaction
     - wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
-    - java -jar selenium-server-standalone-2.47.1.jar > /dev/null &
+    - java -jar selenium-server-standalone-2.53.0.jar > /dev/null &
     - sleep 5
     - cp behat.yml.dist behat.yml
     - php bin/console server:start --env=test
