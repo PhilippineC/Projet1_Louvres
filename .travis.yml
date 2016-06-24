@@ -32,4 +32,4 @@ before_install:
 
 script:
     - phpunit tests
-    - php bin/behat
+    - php bin/behat.bat
