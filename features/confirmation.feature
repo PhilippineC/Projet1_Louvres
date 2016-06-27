@@ -29,6 +29,7 @@ Feature: TestConfirmationPage
     And I should see "1 billet tarif sénior"
     And I should see "47 €"
     When I press "commande_valider"
+    And I wait for 5 seconds
     Then I should see "Confirmation de votre commande"
     And I should see "tarif famille"
     And I should see "tarif senior"

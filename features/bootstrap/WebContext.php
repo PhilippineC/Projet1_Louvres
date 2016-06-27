@@ -18,7 +18,7 @@ class WebContext extends MinkContext {
     public function iSelectASelectableDayInDatepicker()
     {
         $el = $this->getSession()->getPage()->find('css', '#commande_dateVisite');
-    /*    $el->mouseOver();*/
+        $el->mouseOver();
         $el->click();
 
         $date = $this->getSession()->getPage()->find('css', 'a.ui-state-default');
