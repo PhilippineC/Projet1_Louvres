@@ -31,7 +31,6 @@ before_install:
     - java -jar selenium-server-standalone-2.53.0.jar > /dev/null &
     - sleep 5
     - cp behat.yml.dist behat.yml
-    - php bin/console server:start localhost:8080 --env=test --force
     - php -S localhost:8080 web/app_test.php
 
 script:
