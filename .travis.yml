@@ -43,4 +43,6 @@ before_script:
 
 script:
     - phpunit tests
-    - php bin/behat
+    - php bin/behat features/confirmation.feature
+    - php bin/behat features/homepage.feature
+    - php bin/behat features/multiplescenarii.feature
