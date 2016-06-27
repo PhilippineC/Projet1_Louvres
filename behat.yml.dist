@@ -1,7 +1,7 @@
 default:
     extensions:
         Behat\MinkExtension:
-            base_url: http://localhost:1080
+            base_url: http://localhost:8080
             goutte: ~
             selenium2 : ~
     suites:
