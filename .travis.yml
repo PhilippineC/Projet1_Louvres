@@ -32,10 +32,6 @@ before_install:
     - sleep 5
     - cp behat.yml.dist behat.yml
     - php bin/console server:start localhost:8080 --env=test --force
-    - php bin/console server:run
-
-install : true
-
 
 before_script:
     - cp app/config/parameters.yml.dist app/config/parameters.yml
