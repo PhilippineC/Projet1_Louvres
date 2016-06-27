@@ -7,7 +7,7 @@ cache:
         $HOME/.composer/cache/files
 
 php:
-    - "5.6.19"
+    - "5.6"
     - "7.0"
     - nightly
     - hhvm
@@ -19,7 +19,7 @@ matrix:
 
 env:
     global:
-        - MIN_PHP=5.6.19
+        - MIN_PHP=5.6.21
 
 before_install:
     - composer self-update --stable --no-interaction
