@@ -41,9 +41,11 @@
 
             <div class="collapse navbar-collapse logo">
                 <div class="col-sm-4">
-                    {% image '@LouvresCommandeBundle/Resources/public/images/logo_louvre.png' %}
-                    <img src="{{ asset_url }}" alt="Logo du Louvre" />
-                    {% endimage %}
+                    <a href="{{ path('Louvres_commande_home') }}">
+                        {% image '@LouvresCommandeBundle/Resources/public/images/logo_louvre.png' %}
+                        <img src="{{ asset_url }}" alt="Logo du Louvre" />
+                        {% endimage %}
+                    </a>
                 </div>
                 <div class="col-sm-8">
                     <h1>Billeterie</h1>
@@ -55,9 +57,11 @@
     <!-- Bandeau rouge -->
     <div class="bandeau_rouge">
         <div class="container-fluid">
-            {% image '@LouvresCommandeBundle/Resources/public/images/home_crumb.png' %}
-            <img src="{{ asset_url }}" alt="Pyramide" />
-            {% endimage %}
+            <a href="{{ path('Louvres_commande_home') }}">
+                {% image '@LouvresCommandeBundle/Resources/public/images/home_crumb.png' %}
+                <img src="{{ asset_url }}" alt="Pyramide" />
+                {% endimage %}
+            </a>
         </div>
     </div>
 {% endblock %}

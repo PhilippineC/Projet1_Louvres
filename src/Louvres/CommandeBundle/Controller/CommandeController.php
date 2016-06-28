@@ -76,16 +76,9 @@ class CommandeController extends Controller
             $em->persist($confirmation);
             $em->flush();
 
-
-            if ($commande->getConfirmation()->getMoyenPaiement() == 'paypal') {
-                return $this->redirect($this->generateUrl('Louvres_commande_paiement_paypal', array(
-                    'code' => $commande->getCode()
-                )));
-            } elseif ($commande->getConfirmation()->getMoyenPaiement() == 'stripe') {
-                return $this->redirect($this->generateUrl('Louvres_commande_paiement_stripe', array(
-                    'code' => $commande->getCode()
-                )));
-            }
+            $gateway = $commande->getConfirmation()->getMoyenPaiement();
+            return $this->redirectToRoute('Louvres_commande_paiement_'.$gateway, array(
+                'code' => $commande->getCode()));
         }
 
         return $this->render('LouvresCommandeBundle:Commande:confirmation.html.twig', array(
