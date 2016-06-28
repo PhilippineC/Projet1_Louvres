@@ -42,4 +42,5 @@ script:
     - phpunit tests
     - php bin/behat features/confirmation.feature
     - php bin/behat features/homepage.feature
-    - php bin/behat features/multiplescenarii.feature
+    - php bin/behat features/BilletEnfantPlusReduit.feature
+    - php bin/behat features/BilletReduit.feature
