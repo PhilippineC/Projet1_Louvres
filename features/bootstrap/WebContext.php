@@ -23,6 +23,7 @@ class WebContext extends MinkContext {
 
         $date = $this->getSession()->getPage()->find('css', 'a.ui-state-default');
         $date->click();
-    }
 
+        $this->getSession()->wait(1000);
+    }
 }
