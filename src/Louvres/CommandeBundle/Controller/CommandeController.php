@@ -50,9 +50,6 @@ class CommandeController extends Controller
                 }
             }
             $em->flush();
-        /*    return $this->redirectToRoute('Louvres_commande_confirmation',  array(
-                'code' => $commande->getCode()
-            )));*/
             return $this->redirect($this->generateUrl('Louvres_commande_confirmation',  array(
                     'code' => $commande->getCode()
             )));

@@ -77,6 +77,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifMemeNomAvecQuatresBillets()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
@@ -89,6 +90,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifMemeNomAvecCinqBillets()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
@@ -100,6 +102,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testTarifFamilleTrue()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
@@ -110,6 +113,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testTarifFamilleFalse()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
@@ -120,6 +124,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculPrixTotalUnBilletReduit()
     {
+        $this->commande->setTypeBillet('journee');
         $this->billet1->setReduit(true);
         $this->commande->addBillet($this->billet1);
         $this->commande->calculPrixTotal();
@@ -127,18 +132,20 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testCalculPrixTotalUnBilletReduitetUnBilletNormal()
+    public function testCalculPrixTotalUnBilletReduitetUnBilletNormalDemiTarif()
     {
+        $this->commande->setTypeBillet('demi-journee');
         $this->billet1->setReduit(true);
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->calculPrixTotal();
-        $this->assertEquals(Commande::TARIF_REDUIT + Commande::TARIF_NORMAL, $this->commande->getPrixTotal());
+        $this->assertEquals((Commande::TARIF_REDUIT + Commande::TARIF_NORMAL)/2, $this->commande->getPrixTotal());
 
     }
 
     public function testCalculPrixTotalUnBilletSeniorEtUnBilletEnfant()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet5);
         $this->commande->calculPrixTotal();
@@ -146,19 +153,21 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testCalculPrixTotalUnBilletFamille()
+    public function testCalculPrixTotalUnBilletFamilleDemiJournee()
     {
+        $this->commande->setTypeBillet('demi-journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
         $this->commande->addBillet($this->billet4);
         $this->commande->calculPrixTotal();
-        $this->assertEquals(Commande::TARIF_FAMILLE, $this->commande->getPrixTotal());
+        $this->assertEquals((Commande::TARIF_FAMILLE/2), $this->commande->getPrixTotal());
 
     }
 
     public function testCalculPrixTotalUnBilletFamilleMemeSiReduitCoche()
     {
+        $this->commande->setTypeBillet('journee');
         $this->billet1->setReduit(true);
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
@@ -171,6 +180,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculPrixTotalUnBilletFamilleEtUnBilletSenior()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet2);
         $this->commande->addBillet($this->billet3);
@@ -182,6 +192,7 @@ class CommandeTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculPrixTotalUnBilletNormalEtUnBilletGratuit()
     {
+        $this->commande->setTypeBillet('journee');
         $this->commande->addBillet($this->billet1);
         $this->commande->addBillet($this->billet6);
         $this->commande->calculPrixTotal();

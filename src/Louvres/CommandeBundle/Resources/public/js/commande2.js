@@ -80,11 +80,12 @@ $(function() {
                 (parseInt(today.getFullYear()) == date_select.substring(6,10)) &&
                 (today.getHours() > 13 )) {
                 $('.Journée').hide('slow');
-                $('input[class^="Demi"]').attr('checked', true);
+                $('input[class^="Demi"]').prop('checked', true);
                 $('#type_billet').text(' à partir de 14h');
+                $('#demi-tarif').text(' (demi-tarif) ');
             }
             else {
-                $('.Journée').attr('checked', true);
+                $('input[class^="Journ"]').prop('checked', true);
                 $('.Journée').show('slow');
                 $('#type_billet').text(' pour la journée');
             }
@@ -105,14 +106,30 @@ var TARIFS = {
 };
 var TEXT = {
     gratuit : 'gratuit pour les - de 4 ans',
-    enfant : 'tarif enfant (de 4 à 12 ans) : ' + TARIFS.enfant + '€',
-    normal : 'tarif normal : ' + TARIFS.normal + '€',
-    senior : 'tarif sénior (à partir de 60 ans) : ' + TARIFS.senior + '€',
-    reduit : 'tarif réduit : ' + TARIFS.reduit + '€ (une pièce justificative vous sera demandée à l\'entrée.)',
-    famille : 'tarif famille (2 adultes et 2 enfants portant le même nom de famille) : ' + TARIFS.famille + '€'
+    enfant : 'tarif enfant (de 4 à 12 ans) : ' + TARIFS.enfant.toLocaleString("fr-FR", {style: "currency", currency: "EUR"}),
+    normal : 'tarif normal : ' + TARIFS.normal.toLocaleString("fr-FR", {style: "currency", currency: "EUR"}),
+    senior : 'tarif sénior (à partir de 60 ans) : ' + TARIFS.senior.toLocaleString("fr-FR", {style: "currency", currency: "EUR"}),
+    reduit : 'tarif réduit : ' + TARIFS.reduit.toLocaleString("fr-FR", {style: "currency", currency: "EUR"}) + ' (une pièce justificative vous sera demandée à l\'entrée.)',
+    famille : 'tarif famille (2 adultes et 2 enfants portant le même nom de famille) : ' + TARIFS.famille.toLocaleString("fr-FR", {style: "currency", currency: "EUR"})
 };
 var NB_INPUTS = 4; // nb d'inputs par formulaire (prenom, nom, date_naisance et tarif reduit)
+var commande_en_cours = new Commande();
 /* ************************* Déclaration des fonctions **************** */
+// Fonction qui remplit le champs texte 'type de billet' du récap de la commande
+function TypeBillet() {
+    if ($(':radio.Journée:checked').val()) {
+        $('#type_billet').text(' pour la journée');
+        $('#demi-tarif').text('');
+        commande_en_cours.type = 'journee';
+    }
+
+    if ($(':radio[class^="Demi"]:checked').val()) {
+        $('#type_billet').text(' à partir de 14h');
+        $('#demi-tarif').text(' (demi-tarif) ');
+        commande_en_cours.type = 'demi-journee';
+    }
+}
+
 //Fonction qui valide une date de naissance
 function ValidateDate(dtValue) {
     var date = new Date(dtValue.split("/").reverse().join("/"));
@@ -285,7 +302,7 @@ function FormulaireRempli(inputsElts) {
         $('#details_billets p').remove();
 
         //On affiche le prix total de la commande
-        $('#prix').text(CalculPrixCommande(tabTarifs) + ' €');
+        $('#prix').text(CalculPrixCommande(tabTarifs).toLocaleString("fr-FR", {style: "currency", currency: "EUR"}));
         return true;
     }
     else {
@@ -325,6 +342,9 @@ function CalculPrixCommande(tabTarifs) {
                 break;
             }
         }
+    }
+    if (commande_en_cours.type == 'demi-journee') {
+        prixTotal = prixTotal/2;
     }
     return prixTotal;
 }
@@ -378,10 +398,8 @@ function Billet(index, nom, prenom, dateNaissance, reduit) {
     this.text = this.texte(this.tarif);
 }
 
-// Objet Commande (ne sert pas pour l'instant)
-function Commande(Billets, type) {
-    this.billets = Billets;
-    this.type = type;
+function Commande() {
+    this.type = null;
 }
 
 $(function() {
@@ -396,12 +414,7 @@ $(function() {
 
     /* Selection du type de billet (journée, demi-journée) */
     $(':radio').change(function () {
-        if ($(':radio.Journée:checked').val()) {
-            $('#type_billet').text(' pour la journée');
-        }
-        if ($(':radio[class^="Demi"]:checked').val()) {
-            $('#type_billet').text(' à partir de 14h');
-        }
+        TypeBillet();
         VerifFormulaire();
         FormulaireRempli($('.billets input'));
     });

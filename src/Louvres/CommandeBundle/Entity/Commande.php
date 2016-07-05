@@ -87,8 +87,8 @@ class Commande
     private $nbBillet;
 
     /**
-     * @var int
-     * @ORM\Column(name="prix_total", type="integer")
+     * @var float
+     * @ORM\Column(name="prix_total", type="float")
      */
     private $prixTotal = 0;
 
@@ -234,7 +234,7 @@ class Commande
      *
      * @return Commande
      */
-    public function SetPrixTotal($prixTotal)
+    public function setPrixTotal($prixTotal)
     {
         $this->prixTotal = $prixTotal;
         return $this;
@@ -361,6 +361,9 @@ class Commande
                         break;
                 }
             }
+        }
+        if ($this->typeBillet == 'demi-journee') {
+            $this->prixTotal = number_format($this->prixTotal/2, 1);
         }
     }
 

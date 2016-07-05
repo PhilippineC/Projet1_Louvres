@@ -40,7 +40,7 @@
             {% endfor %}
 
         <div class="total_commande">
-            <p><strong>Total de la commande : {{ commande.prixTotal }} €</strong></p>
+            <p><strong>Total de la commande : {{ commande.prixTotal|number_format(2, ',') }} €</strong></p>
         </div>
     </div>
 </body>

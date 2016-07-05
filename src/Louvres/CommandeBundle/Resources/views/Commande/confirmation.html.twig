@@ -30,7 +30,15 @@
                 <p><strong>Réservation n° : {{ commande.code }}</strong></p>
             </div>
             <div class="reste_commande">
-                <p>Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }}</p>
+                <p>
+                    Jour de la visite : {{ commande.dateVisite|date('d/m/Y') }}
+                    {% if commande.typeBillet == 'demi-journee' %}
+                        <span> à partir de 14h</span>
+                    {% endif %}
+                    {% if commande.typeBillet == 'journee' %}
+                        <span> pour la journée</span>
+                    {% endif %}
+                </p>
                 <p>Nombre de billet(s) : {{ commande.nbBillet }}</p>
                 <p> Détail des billet(s) : </p>
                 <div id="details_billets">
@@ -39,7 +47,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <p id ="total_commande"><strong>Total de la commande : {{ commande.prixTotal }} €</strong></p>
+            <p id ="total_commande"><strong>Total de la commande : {{ commande.prixTotal|number_format(2, ',') }} €</strong></p>
         </div>
     </div>
 

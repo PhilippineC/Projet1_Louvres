@@ -5,6 +5,7 @@ Feature: TestConfirmationPage
   Scenario: TestBilletsFamilletUnSeniorEmailFailed
     Given I am on the homepage
     When I select a selectable day in datepicker
+    And I select "demi-journee" from "commande[typeBillet]"
     And I fill in "commande_billets_0_nom" with "Dupont"
     And I fill in "commande_billets_0_prenom" with "Marie"
     And I fill in "commande_billets_0_dateNaissance" with "03/04/1988"
@@ -27,13 +28,13 @@ Feature: TestConfirmationPage
     And I fill in "commande_billets_4_dateNaissance" with "03/04/1949"
     Then I should see "1 billet tarif famille"
     And I should see "1 billet tarif sénior"
-    And I should see "47 €"
+    And I should see "23,50 €"
     When I press "commande_valider"
     And I wait for 5 seconds
     Then I should see "Confirmation de votre commande"
     And I should see "tarif famille"
     And I should see "tarif senior"
-    And I should see "47 €"
+    And I should see "23,50 €"
     When I fill in "Votre email" with "btest.fr"
     And I select "stripe" from "confirmation[moyenPaiement]"
     And I press "confirmation_valider"
