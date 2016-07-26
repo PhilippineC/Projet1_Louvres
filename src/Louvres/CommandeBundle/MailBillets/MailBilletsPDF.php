@@ -29,7 +29,7 @@ class MailBilletsPDF  {
     {
         $this->pdf->generateFromHtml(
             $this->template->render(
-                'LouvresCommandeBundle:Commande:Billets.html.twig',
+                'LouvresCommandeBundle:Commande:billets.html.twig',
                 array(
                     'commande'  => $this->commande
                 )

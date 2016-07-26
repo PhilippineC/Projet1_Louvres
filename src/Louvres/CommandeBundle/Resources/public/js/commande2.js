@@ -1,7 +1,7 @@
 
 
 /* ******************** DATEPICKER ********************************* */
-var disableddatesFerie = ["5-1-2016","11-1-2016", "12-25-2016", "5-28-2016"];
+var disableddatesFerie = ["5-1-2016","11-1-2016", "11-11-2016", "8-15-2016", "12-25-2016", "5-28-2016"];
 var disableddatesComplet = $('.disableddatesComplet').text(); // On récupère les dates complet
 
 //on enlève les guillements
