@@ -1,7 +1,8 @@
 
 
 /* ******************** DATEPICKER ********************************* */
-var disableddatesFerie = ["5-1-2016","11-1-2016", "11-11-2016", "8-15-2016", "12-25-2016", "5-28-2016"];
+
+/* RECUPERATION ET MISE EN FORME DU TABLEAU AVEC DATES OU LE MUSEE EST COMPLET */
 var disableddatesComplet = $('.disableddatesComplet').text(); // On récupère les dates complet
 
 //on enlève les guillements
@@ -24,9 +25,38 @@ for (var i = 0; i <disableddatesComplet.length; i++) {
     }
 }
 
-var disabledDates = (typeof disableddatesComplet === 'undefined') ? disableddatesFerie : disableddatesFerie.concat(disableddatesComplet);
 
-/* ***** Fonction qui renvoie les jours indisponibles (mardi et dimanche) et disponible ****** */
+/* ***** Fonction qui renvoie le tableau des jours fériès de l'année ****** */
+function JoursFeries(an) {
+    var JourAn = "1-1";
+    var FeteTravail = "5-1";
+    var Victoire1945 = "5-8";
+    var FeteNationale = "7-14";
+    var Assomption = "8-15";
+    var Toussaint = "11-1";
+    var Armistice = "11-11";
+    var Noel = "12-25";
+
+    var G = an%19;
+    var C = Math.floor(an/100);
+    var H = (C - Math.floor(C/4) - Math.floor((8*C+13)/25) + 19*G + 15)%30;
+    var I = H - Math.floor(H/28)*(1 - Math.floor(H/28)*Math.floor(29/(H + 1))*Math.floor((21 - G)/11));
+    var J = (an*1 + Math.floor(an/4) + I + 2 - C + Math.floor(C/4))%7;
+    var L = I - J;
+    var MoisPaques = 3 + Math.floor((L + 40)/44);
+    var JourPaques = L + 28 - 31*Math.floor(MoisPaques/4);
+    var LundiPaques = new Date(an, MoisPaques-1, JourPaques+1);
+    LundiPaques = LundiPaques.getMonth()+1 + '-' + LundiPaques.getDate();
+    var Ascension = new Date(an, MoisPaques-1, JourPaques+39);
+    Ascension = Ascension.getMonth()+1 + '-' + Ascension.getDate();
+    var LundiPentecote = new Date(an, MoisPaques-1, JourPaques+50);
+    LundiPentecote = LundiPentecote.getMonth()+1 + '-' + LundiPentecote.getDate();
+
+    return [JourAn, LundiPaques, FeteTravail, Victoire1945, Ascension, LundiPentecote, FeteNationale, Assomption, Toussaint, Armistice, Noel];
+
+}
+
+/* ***** Fonction qui renvoie les jours indisponibles (mardi, dimanche, jours fériés et jours complet) et disponibles ****** */
 
 function DisableSpecificDates(date) {
     var m = date.getMonth();
@@ -35,12 +65,19 @@ function DisableSpecificDates(date) {
     var day = date.getDay();
 
     var currentDate = (m+1) + '-' + d + '-' + y ;
+    var currentDateMonthDay = (m+1) + '-' + d;
 
-    for (var i = 0; i < disabledDates.length; i++) {
-        if ($.inArray(currentDate, disabledDates) != -1 ) {
+    for (var i = 0; i < disableddatesComplet.length; i++) {
+        if ($.inArray(currentDate, disableddatesComplet) != -1 ) {
             return [false];
         }
     }
+    for (var j = 0; j < 10; j++) { //10 étant le nombre de jours fériés - 1
+        if ($.inArray(currentDateMonthDay, JoursFeries(y)) != -1 ) {
+            return [false];
+        }
+    }
+
     if ((day == 2) || (day == 0)) {
         return [false] ;
     } else {
